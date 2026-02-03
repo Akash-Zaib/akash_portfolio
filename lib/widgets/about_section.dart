@@ -197,15 +197,25 @@ class AboutSection extends StatelessWidget {
 
   static Future<void> _launchEmail() async {
     final uri = Uri.parse('mailto:${AppConstants.email}');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    try {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      // Fallback: try without mode specification
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      }
     }
   }
 
   static Future<void> _launchPhone() async {
     final uri = Uri.parse('tel:${AppConstants.phone}');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    try {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      // Fallback: try without mode specification
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      }
     }
   }
 }
