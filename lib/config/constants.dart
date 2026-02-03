@@ -8,7 +8,7 @@ class AppConstants {
   
   // Social Links
   static const String linkedInUrl = 'https://www.linkedin.com/in/akash-zaib-malik-0a1968248';
-  static const String githubUrl = 'https://github.com/akashzaib';
+  static const String githubUrl = 'http://github.com/Akash-Zaib';
   static const String whatsAppNumber = '923056838083';
   
   // Education
@@ -16,9 +16,18 @@ class AppConstants {
   static const String university = 'Government College University, Faisalabad';
   static const String cgpa = '3.43/4';
   
-  // CV Path - Place your CV PDF in assets/documents/
-  static const String cvPath = 'assets/documents/cv.pdf';
+  // CV URL - Host your CV on Google Drive, Dropbox, or any cloud service
+  // To get Google Drive direct link:
+  // 1. Upload CV to Google Drive
+  // 2. Right-click > Share > Anyone with the link can view
+  // 3. Copy link like: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+  // 4. Replace FILE_ID below with your actual file ID
+  static const String cvPath = 'https://drive.google.com/file/d/1fmFOPJvW_3u0TAeNwLaZypcuJBmj17uM/view?usp=sharing';
   static const String cvFileName = 'Akash_Zaib_Malik_CV.pdf';
+  
+  // Direct download link for CV (for Google Drive, use this format)
+  // Replace YOUR_FILE_ID_HERE with actual file ID from Google Drive
+  static const String cvDownloadUrl = 'https://drive.google.com/uc?id=1fmFOPJvW_3u0TAeNwLaZypcuJBmj17uM&export=download';
   
   // EmailJS Configuration - UPDATE THESE WITH YOUR ACTUAL VALUES
   static const String emailJsServiceId = 'YOUR_SERVICE_ID';
@@ -31,7 +40,8 @@ class AppConstants {
     'Flutter',
     'Dart',
     'Firebase',
-    'UI/UX Design',
+    'FlutterFlow',
+    
   ];
   
   // Responsive Breakpoints

@@ -252,7 +252,7 @@ class _InfoCardState extends State<_InfoCard> {
             ),
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 padding: EdgeInsets.all(widget.isMobile ? 10 : 12),
@@ -263,22 +263,23 @@ class _InfoCardState extends State<_InfoCard> {
                 child: FaIcon(
                   widget.icon,
                   color: Colors.white,
-                  size: widget.isMobile ? 14 : 16,
+                  size: widget.isMobile ? 16 : 18,
                 ),
               ),
-              SizedBox(width: widget.isMobile ? 12 : 16),
+              SizedBox(width: widget.isMobile ? 14 : 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       widget.title,
                       style: AppTheme.labelLarge.copyWith(
                         color: AppTheme.textMuted,
-                        fontSize: widget.isMobile ? 11 : 12,
+                        fontSize: widget.isMobile ? 12 : 13,
                       ),
                     ),
-                    const SizedBox(height: 3),
+                    const SizedBox(height: 4),
                     Text(
                       widget.content,
                       style: AppTheme.bodyMedium.copyWith(
@@ -286,17 +287,21 @@ class _InfoCardState extends State<_InfoCard> {
                             ? AppTheme.primaryBlue
                             : AppTheme.textPrimary,
                         height: 1.4,
-                        fontSize: widget.isMobile ? 12 : 14,
+                        fontSize: widget.isMobile ? 13 : 14,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
               ),
               if (widget.onTap != null)
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: AppTheme.textMuted,
-                  size: widget.isMobile ? 12 : 14,
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: AppTheme.textMuted,
+                    size: widget.isMobile ? 14 : 16,
+                  ),
                 ),
             ],
           ),
@@ -425,8 +430,9 @@ class _DownloadCVButtonState extends State<_DownloadCVButton> {
     // Brief delay for UX
     await Future.delayed(const Duration(milliseconds: 800));
 
+    // Use cvDownloadUrl for direct download
     final success = await DownloadService.downloadFile(
-      AppConstants.cvPath,
+      AppConstants.cvDownloadUrl,
       AppConstants.cvFileName,
     );
 
