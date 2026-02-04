@@ -4,6 +4,7 @@ import '../config/theme.dart';
 import '../config/constants.dart';
 import '../models/experience.dart';
 import 'responsive_builder.dart';
+import 'animated_entrance.dart';
 
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
@@ -20,19 +21,35 @@ class ExperienceSection extends StatelessWidget {
           vertical: isMobile ? 48 : 80,
         ),
         decoration: BoxDecoration(
-          color: AppTheme.secondaryBackground.withValues(alpha: 0.3),
+          color: AppTheme.secondaryBackground.withValues(alpha: 0.2),
         ),
         child: ContentContainer(
           child: Column(
             children: [
               // Section Title
-              GradientText(
-                text: l10n.experienceTitle,
-                style: isMobile ? AppTheme.headlineMedium : AppTheme.headlineLarge,
-                textAlign: TextAlign.center,
+              AnimatedEntrance(
+                delay: Duration.zero,
+                child: Column(
+                  children: [
+                    Text(
+                      'EXPERIENCE',
+                      style: AppTheme.labelLarge.copyWith(
+                        color: AppTheme.primaryBlue,
+                        letterSpacing: 3,
+                        fontSize: isMobile ? 11 : 12,
+                      ),
+                    ),
+                    SizedBox(height: isMobile ? 8 : 12),
+                    GradientText(
+                      text: l10n.experienceTitle,
+                      style: isMobile ? AppTheme.headlineMedium : AppTheme.headlineLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
               
-              SizedBox(height: isMobile ? 24 : 40),
+              SizedBox(height: isMobile ? 28 : 48),
               
               // Experience Timeline
               ...workExperiences.asMap().entries.map((entry) {
@@ -40,11 +57,14 @@ class ExperienceSection extends StatelessWidget {
                 final experience = entry.value;
                 final isLast = index == workExperiences.length - 1;
                 
-                return _ExperienceCard(
-                  experience: experience,
-                  l10n: l10n,
-                  isLast: isLast,
-                  isMobile: isMobile,
+                return AnimatedEntrance(
+                  delay: Duration(milliseconds: 100 + (index * 120)),
+                  child: _ExperienceCard(
+                    experience: experience,
+                    l10n: l10n,
+                    isLast: isLast,
+                    isMobile: isMobile,
+                  ),
                 );
               }),
             ],

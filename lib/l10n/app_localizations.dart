@@ -142,6 +142,12 @@ abstract class AppLocalizations {
   /// **'Contact'**
   String get navContact;
 
+  /// No description provided for @heroGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'HELLO, I\'M'**
+  String get heroGreeting;
+
   /// No description provided for @heroName.
   ///
   /// In en, this message translates to:
@@ -177,6 +183,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'UI/UX Design'**
   String get heroTagUIUX;
+
+  /// No description provided for @heroCTAContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Get in Touch'**
+  String get heroCTAContact;
+
+  /// No description provided for @heroCTAProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'View Projects'**
+  String get heroCTAProjects;
 
   /// No description provided for @aboutTitle.
   ///

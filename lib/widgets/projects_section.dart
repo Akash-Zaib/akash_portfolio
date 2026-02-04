@@ -3,10 +3,46 @@ import '../l10n/app_localizations.dart';
 import '../config/theme.dart';
 import '../config/constants.dart';
 import '../models/project.dart';
+import '../screens/project_detail_screen.dart';
 import 'responsive_builder.dart';
+import 'animated_entrance.dart';
 
-class ProjectsSection extends StatelessWidget {
+class ProjectsSection extends StatefulWidget {
   const ProjectsSection({super.key});
+
+  @override
+  State<ProjectsSection> createState() => _ProjectsSectionState();
+}
+
+class _ProjectsSectionState extends State<ProjectsSection>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _entranceController;
+  bool _hasAnimated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _entranceController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    
+    // Start animation after widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted && !_hasAnimated) {
+          _hasAnimated = true;
+          _entranceController.forward();
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _entranceController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,68 +55,115 @@ class ProjectsSection extends StatelessWidget {
         padding: EdgeInsets.symmetric(
           vertical: isMobile ? 48 : 80,
         ),
-        child: ContentContainer(
-          child: Column(
-            children: [
-              // Section Title
-              GradientText(
-                text: l10n.projectsTitle,
-                style: isMobile ? AppTheme.headlineMedium : AppTheme.headlineLarge,
-                textAlign: TextAlign.center,
+        decoration: BoxDecoration(
+          color: AppTheme.secondaryBackground.withValues(alpha: 0.2),
+        ),
+        child: Column(
+          children: [
+            // Section Title (centered with max width)
+            ContentContainer(
+              child: AnimatedEntrance(
+                delay: Duration.zero,
+                child: Column(
+                  children: [
+                    Text(
+                      'PORTFOLIO',
+                      style: AppTheme.labelLarge.copyWith(
+                        color: AppTheme.primaryBlue,
+                        letterSpacing: 3,
+                        fontSize: isMobile ? 11 : 12,
+                      ),
+                    ),
+                    SizedBox(height: isMobile ? 8 : 12),
+                    GradientText(
+                      text: l10n.projectsTitle,
+                      style: isMobile ? AppTheme.headlineMedium : AppTheme.headlineLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: isMobile ? 8 : 12),
+                    Text(
+                      'Tap on a project to explore details',
+                      style: AppTheme.bodyMedium.copyWith(
+                        color: AppTheme.textMuted,
+                        fontSize: isMobile ? 13 : 14,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              
-              SizedBox(height: isMobile ? 24 : 40),
-              
-              // Projects Grid
-              _buildProjectsGrid(context, l10n, isMobile),
-            ],
-          ),
+            ),
+            
+            SizedBox(height: isMobile ? 28 : 48),
+            
+            // Projects Grid (FULL WIDTH)
+            FullWidthContainer(
+              child: _buildProjectsGrid(context, l10n, isMobile),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildProjectsGrid(BuildContext context, AppLocalizations l10n, bool isMobile) {
+    final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = ResponsiveBuilder.isTablet(context);
     
+    // Calculate number of columns based on screen width - more columns for wider screens
+    int crossAxisCount;
+    double spacing;
+    
     if (isMobile) {
-      return Column(
-        children: portfolioProjects.map((project) {
-          return Padding(
-            key: ValueKey(project.titleKey),
-            padding: const EdgeInsets.only(bottom: 20),
-            child: _ProjectCard(key: ValueKey('card_${project.titleKey}'), project: project, l10n: l10n, isMobile: true),
-          );
-        }).toList(),
-      );
+      crossAxisCount = 1;
+      spacing = 16;
+    } else if (isTablet || screenWidth < 1024) {
+      crossAxisCount = 2;
+      spacing = 20;
+    } else if (screenWidth < 1400) {
+      crossAxisCount = 3;
+      spacing = 24;
+    } else if (screenWidth < 1800) {
+      crossAxisCount = 4;
+      spacing = 24;
+    } else {
+      // Very large screens - 5 columns
+      crossAxisCount = 5;
+      spacing = 28;
     }
     
-    if (isTablet) {
-      return Wrap(
-        spacing: 20,
-        runSpacing: 20,
-        children: portfolioProjects.map((project) {
-          return SizedBox(
-            key: ValueKey(project.titleKey),
-            width: (MediaQuery.of(context).size.width - 120) / 2,
-            child: _ProjectCard(key: ValueKey('card_${project.titleKey}'), project: project, l10n: l10n, isMobile: false),
-          );
-        }).toList(),
-      );
-    }
-    
-    // Desktop - each card expands independently
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: portfolioProjects.map((project) {
-        return Expanded(
-          key: ValueKey(project.titleKey),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: _ProjectCard(key: ValueKey('card_${project.titleKey}'), project: project, l10n: l10n, isMobile: false),
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.maxWidth;
+        final totalSpacing = spacing * (crossAxisCount - 1);
+        
+        // Cards expand to fill available space evenly
+        final cardWidth = (availableWidth - totalSpacing) / crossAxisCount;
+        
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          alignment: WrapAlignment.start, // Align to start for better layout
+          children: portfolioProjects.asMap().entries.map((entry) {
+            final index = entry.key;
+            final project = entry.value;
+            return AnimatedEntrance(
+              delay: Duration(milliseconds: 100 + (index * 60)),
+              child: SizedBox(
+                key: ValueKey(project.id),
+                width: isMobile ? availableWidth : cardWidth,
+                child: _ProjectCard(
+                  key: ValueKey('card_${project.id}'),
+                  project: project,
+                  l10n: l10n,
+                  isMobile: isMobile,
+                  animationController: _entranceController,
+                  index: index,
+                ),
+              ),
+            );
+          }).toList(),
         );
-      }).toList(),
+      },
     );
   }
 }
@@ -89,12 +172,16 @@ class _ProjectCard extends StatefulWidget {
   final Project project;
   final AppLocalizations l10n;
   final bool isMobile;
+  final AnimationController animationController;
+  final int index;
 
   const _ProjectCard({
     super.key,
     required this.project,
     required this.l10n,
     required this.isMobile,
+    required this.animationController,
+    required this.index,
   });
 
   @override
@@ -103,232 +190,274 @@ class _ProjectCard extends StatefulWidget {
 
 class _ProjectCardState extends State<_ProjectCard> {
   bool _isHovered = false;
-  bool _showFeatures = false;
+  bool _isPressed = false;
 
-  String _getLocalizedTitle() {
-    switch (widget.project.titleKey) {
-      case 'projectOOSCTitle':
-        return widget.l10n.projectOOSCTitle;
-      case 'projectISOARTitle':
-        return widget.l10n.projectISOARTitle;
-      case 'projectLookbookTitle':
-        return widget.l10n.projectLookbookTitle;
-      default:
-        return widget.project.titleKey;
-    }
-  }
-
-  String _getLocalizedDescription() {
-    switch (widget.project.descriptionKey) {
-      case 'projectOOSCDescription':
-        return widget.l10n.projectOOSCDescription;
-      case 'projectISOARDescription':
-        return widget.l10n.projectISOARDescription;
-      case 'projectLookbookDescription':
-        return widget.l10n.projectLookbookDescription;
-      default:
-        return widget.project.descriptionKey;
-    }
-  }
-
-  Color _getProjectColor() {
-    switch (widget.project.titleKey) {
-      case 'projectOOSCTitle':
-        return AppTheme.primaryBlue;
-      case 'projectISOARTitle':
-        return AppTheme.primaryPurple;
-      case 'projectLookbookTitle':
-        return AppTheme.accentPink;
-      default:
-        return AppTheme.primaryBlue;
-    }
-  }
-
-  IconData _getProjectIcon() {
-    switch (widget.project.titleKey) {
-      case 'projectOOSCTitle':
-        return Icons.school_rounded;
-      case 'projectISOARTitle':
-        return Icons.people_rounded;
-      case 'projectLookbookTitle':
-        return Icons.checkroom_rounded;
-      default:
-        return Icons.code_rounded;
-    }
+  void _navigateToDetail() {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return ProjectDetailScreen(project: widget.project);
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 0.03);
+          const end = Offset.zero;
+          final tween = Tween(begin: begin, end: end)
+              .chain(CurveTween(curve: Curves.easeOutCubic));
+          final offsetAnimation = animation.drive(tween);
+          
+          return SlideTransition(
+            position: offsetAnimation,
+            child: FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 400),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final projectColor = _getProjectColor();
+    final projectColor = widget.project.accentColor;
+    final scale = _isPressed ? 0.98 : (_isHovered ? 1.02 : 1.0);
     
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () => setState(() => _showFeatures = !_showFeatures),
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) {
+          setState(() => _isPressed = false);
+          _navigateToDetail();
+        },
+        onTapCancel: () => setState(() => _isPressed = false),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            color: AppTheme.cardBackground,
-            borderRadius: BorderRadius.circular(AppConstants.radiusLG),
-            border: Border.all(
-              color: _isHovered ? projectColor : AppTheme.inputBorder,
-              width: 1,
-            ),
-            boxShadow: _isHovered
-                ? [
-                    BoxShadow(
-                      color: projectColor.withValues(alpha: 0.15),
-                      blurRadius: 20,
-                      offset: const Offset(0, 8),
-                    ),
-                  ]
-                : null,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Project Image/Icon Header
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(AppConstants.radiusLG - 1),
-                ),
-                child: Container(
-                  height: widget.isMobile ? 140 : 160,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        projectColor.withValues(alpha: 0.15),
-                        AppTheme.primaryBackground,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: _isHovered
-                            ? projectColor.withValues(alpha: 0.2)
-                            : Colors.black.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Icon(
-                        _getProjectIcon(),
-                        color: _isHovered ? Colors.white : projectColor,
-                        size: 40,
-                      ),
-                    ),
-                  ),
-                ),
+          duration: AppTheme.quickAnimation,
+          transform: Matrix4.identity()..scale(scale),
+          transformAlignment: Alignment.center,
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppTheme.cardBackground,
+              borderRadius: BorderRadius.circular(AppConstants.radiusXL),
+              border: Border.all(
+                color: _isHovered 
+                    ? projectColor.withValues(alpha: 0.6)
+                    : AppTheme.inputBorder,
+                width: _isHovered ? 1.5 : 1,
               ),
-              
-              // Project Info
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Title
-                    Text(
-                      _getLocalizedTitle(),
-                      style: AppTheme.titleLarge.copyWith(
-                        fontSize: widget.isMobile ? 16 : 18,
+              boxShadow: _isHovered
+                  ? [
+                      BoxShadow(
+                        color: projectColor.withValues(alpha: 0.2),
+                        blurRadius: 30,
+                        offset: const Offset(0, 12),
+                        spreadRadius: -5,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    
-                    const SizedBox(height: 8),
-                    
-                    // Description
-                    Text(
-                      _getLocalizedDescription(),
-                      style: AppTheme.bodyMedium.copyWith(
-                        fontSize: 13,
-                        height: 1.4,
+                    ]
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
-                      maxLines: _showFeatures ? 10 : 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    
-                    // Features (expandable)
-                    if (_showFeatures) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        'Key Features:',
-                        style: AppTheme.labelLarge.copyWith(
-                          color: projectColor,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      ...widget.project.features.take(6).map((feature) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 3),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.check_circle_outline,
-                                color: projectColor,
-                                size: 14,
-                              ),
-                              const SizedBox(width: 6),
-                              Expanded(
-                                child: Text(
-                                  feature,
-                                  style: AppTheme.bodyMedium.copyWith(
-                                    fontSize: 11,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
                     ],
-                    
-                    const SizedBox(height: 12),
-                    
-                    // Tech Stack
-                    Text(
-                      widget.l10n.techStack,
-                      style: AppTheme.labelLarge.copyWith(
-                        color: AppTheme.textMuted,
-                        fontSize: 11,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Project Image/Icon Header
+                _buildHeader(projectColor),
+                
+                // Project Info
+                Padding(
+                  padding: EdgeInsets.all(widget.isMobile ? 16 : 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Title
+                      Text(
+                        widget.project.title,
+                        style: AppTheme.titleLarge.copyWith(
+                          fontSize: widget.isMobile ? 17 : 19,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
-                      children: widget.project.techStack.take(6).map((tech) {
-                        return _TechTag(label: tech, color: projectColor);
-                      }).toList(),
-                    ),
-                    
-                    // Expand indicator
-                    const SizedBox(height: 8),
-                    Center(
-                      child: Icon(
-                        _showFeatures
-                            ? Icons.keyboard_arrow_up
-                            : Icons.keyboard_arrow_down,
-                        color: AppTheme.textMuted,
-                        size: 18,
+                      
+                      SizedBox(height: widget.isMobile ? 8 : 10),
+                      
+                      // Description
+                      Text(
+                        widget.project.description,
+                        style: AppTheme.bodyMedium.copyWith(
+                          fontSize: widget.isMobile ? 13 : 14,
+                          height: 1.5,
+                          color: AppTheme.textSecondary,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
+                      
+                      SizedBox(height: widget.isMobile ? 14 : 18),
+                      
+                      // Tech Stack
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: widget.project.techStack.take(4).map((tech) {
+                          return _TechTag(label: tech, color: projectColor);
+                        }).toList(),
+                      ),
+                      
+                      SizedBox(height: widget.isMobile ? 14 : 18),
+                      
+                      // View Project CTA
+                      _buildCTA(projectColor),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(Color projectColor) {
+    return ClipRRect(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(AppConstants.radiusXL - 1),
+      ),
+      child: Stack(
+        children: [
+          // Background gradient
+          Container(
+            height: widget.isMobile ? 160 : 180,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  projectColor.withValues(alpha: 0.2),
+                  projectColor.withValues(alpha: 0.05),
+                  AppTheme.cardBackground,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          
+          // Grid overlay
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _SubtleGridPainter(color: projectColor),
+            ),
+          ),
+          
+          // Icon
+          Positioned.fill(
+            child: Center(
+              child: AnimatedContainer(
+                duration: AppTheme.quickAnimation,
+                padding: EdgeInsets.all(widget.isMobile ? 18 : 22),
+                decoration: BoxDecoration(
+                  color: _isHovered
+                      ? projectColor.withValues(alpha: 0.25)
+                      : AppTheme.surfaceColor.withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: _isHovered 
+                        ? projectColor.withValues(alpha: 0.4)
+                        : AppTheme.inputBorder.withValues(alpha: 0.5),
+                  ),
+                  boxShadow: _isHovered ? [
+                    BoxShadow(
+                      color: projectColor.withValues(alpha: 0.3),
+                      blurRadius: 20,
+                      spreadRadius: 0,
+                    ),
+                  ] : null,
+                ),
+                child: Icon(
+                  widget.project.icon,
+                  color: _isHovered ? Colors.white : projectColor,
+                  size: widget.isMobile ? 36 : 42,
+                ),
+              ),
+            ),
+          ),
+          
+          // Hover overlay
+          if (_isHovered)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      projectColor.withValues(alpha: 0.1),
+                      Colors.transparent,
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCTA(Color projectColor) {
+    return AnimatedContainer(
+      duration: AppTheme.quickAnimation,
+      padding: EdgeInsets.symmetric(
+        horizontal: widget.isMobile ? 14 : 16,
+        vertical: widget.isMobile ? 10 : 12,
+      ),
+      decoration: BoxDecoration(
+        color: _isHovered
+            ? projectColor.withValues(alpha: 0.15)
+            : AppTheme.surfaceColor.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(AppConstants.radiusMD),
+        border: Border.all(
+          color: _isHovered 
+              ? projectColor.withValues(alpha: 0.4)
+              : AppTheme.inputBorder.withValues(alpha: 0.5),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            widget.l10n.viewProject,
+            style: AppTheme.labelLarge.copyWith(
+              color: _isHovered ? projectColor : AppTheme.textSecondary,
+              fontSize: widget.isMobile ? 12 : 13,
+            ),
+          ),
+          const SizedBox(width: 6),
+          AnimatedContainer(
+            duration: AppTheme.quickAnimation,
+            transform: Matrix4.translationValues(
+              _isHovered ? 4 : 0,
+              0,
+              0,
+            ),
+            child: Icon(
+              Icons.arrow_forward_rounded,
+              color: _isHovered ? projectColor : AppTheme.textMuted,
+              size: widget.isMobile ? 14 : 16,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -343,19 +472,48 @@ class _TechTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.15)),
       ),
       child: Text(
         label,
         style: AppTheme.bodyMedium.copyWith(
-          fontSize: 10,
+          fontSize: 11,
           color: color,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );
   }
+}
+
+// Subtle grid painter for card headers
+class _SubtleGridPainter extends CustomPainter {
+  final Color color;
+
+  _SubtleGridPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color.withValues(alpha: 0.05)
+      ..strokeWidth = 0.5
+      ..style = PaintingStyle.stroke;
+
+    const gridSize = 30.0;
+    
+    for (double x = 0; x <= size.width; x += gridSize) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    
+    for (double y = 0; y <= size.height; y += gridSize) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

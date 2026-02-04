@@ -132,3 +132,39 @@ class ContentContainer extends StatelessWidget {
     );
   }
 }
+
+// Full Width Container - uses entire screen width with smart padding
+class FullWidthContainer extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+
+  const FullWidthContainer({
+    super.key,
+    required this.child,
+    this.padding,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    
+    // Smart padding based on screen size
+    EdgeInsetsGeometry effectivePadding;
+    if (screenWidth < AppConstants.mobileBreakpoint) {
+      effectivePadding = const EdgeInsets.symmetric(horizontal: 16);
+    } else if (screenWidth < AppConstants.tabletBreakpoint) {
+      effectivePadding = const EdgeInsets.symmetric(horizontal: 32);
+    } else if (screenWidth < 1600) {
+      effectivePadding = const EdgeInsets.symmetric(horizontal: 48);
+    } else {
+      // For very large screens, use percentage-based padding
+      effectivePadding = EdgeInsets.symmetric(horizontal: screenWidth * 0.05);
+    }
+    
+    return Container(
+      width: double.infinity,
+      padding: padding ?? effectivePadding,
+      child: child,
+    );
+  }
+}

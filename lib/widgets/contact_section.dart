@@ -6,6 +6,7 @@ import '../config/theme.dart';
 import '../config/constants.dart';
 import '../services/email_service.dart';
 import 'responsive_builder.dart';
+import 'animated_entrance.dart';
 
 class ContactSection extends StatefulWidget {
   const ContactSection({super.key});
@@ -83,58 +84,80 @@ class _ContactSectionState extends State<ContactSection> {
             vertical: isMobile ? 48 : 80,
           ),
           child: ContentContainer(
-            child: Container(
-              padding: EdgeInsets.all(isMobile ? 20 : 40),
-              decoration: BoxDecoration(
-                color: AppTheme.secondaryBackground.withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(AppConstants.radiusXL),
-                border: Border.all(color: AppTheme.inputBorder),
-              ),
-              child: Column(
-                children: [
-                  // Title
-                  GradientText(
-                    text: l10n.contactTitle,
-                    style: isMobile 
-                        ? AppTheme.headlineMedium 
-                        : AppTheme.headlineLarge,
-                    textAlign: TextAlign.center,
+            child: AnimatedEntrance(
+              delay: Duration.zero,
+              child: Container(
+                padding: EdgeInsets.all(isMobile ? 24 : 48),
+                decoration: BoxDecoration(
+                  color: AppTheme.cardBackground.withValues(alpha: 0.9),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXL),
+                  border: Border.all(
+                    color: AppTheme.inputBorder.withValues(alpha: 0.5),
                   ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  // Subtitle
-                  Text(
-                    l10n.contactSubtitle,
-                    style: AppTheme.bodyLarge.copyWith(
-                      fontSize: isMobile ? 13 : 15,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 30,
+                      offset: const Offset(0, 10),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  
-                  const SizedBox(height: 6),
-                  
-                  // Location
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const FaIcon(
-                        FontAwesomeIcons.locationDot,
-                        color: AppTheme.textMuted,
-                        size: 12,
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    // Section label
+                    Text(
+                      'CONTACT',
+                      style: AppTheme.labelLarge.copyWith(
+                        color: AppTheme.primaryBlue,
+                        letterSpacing: 3,
+                        fontSize: isMobile ? 11 : 12,
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        AppConstants.location,
-                        style: AppTheme.bodyMedium.copyWith(
+                    ),
+                    SizedBox(height: isMobile ? 8 : 12),
+                    
+                    // Title
+                    GradientText(
+                      text: l10n.contactTitle,
+                      style: isMobile 
+                          ? AppTheme.headlineMedium 
+                          : AppTheme.headlineLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    
+                    SizedBox(height: isMobile ? 10 : 14),
+                    
+                    // Subtitle
+                    Text(
+                      l10n.contactSubtitle,
+                      style: AppTheme.bodyLarge.copyWith(
+                        fontSize: isMobile ? 13 : 15,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    
+                    const SizedBox(height: 8),
+                    
+                    // Location
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const FaIcon(
+                          FontAwesomeIcons.locationDot,
                           color: AppTheme.textMuted,
-                          fontSize: isMobile ? 12 : 13,
+                          size: 12,
                         ),
-                      ),
-                    ],
-                  ),
-                  
-                  SizedBox(height: isMobile ? 24 : 36),
+                        const SizedBox(width: 6),
+                        Text(
+                          AppConstants.location,
+                          style: AppTheme.bodyMedium.copyWith(
+                            color: AppTheme.textMuted,
+                            fontSize: isMobile ? 12 : 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    SizedBox(height: isMobile ? 28 : 40),
                   
                   // Contact Form
                   Form(
@@ -189,9 +212,10 @@ class _ContactSectionState extends State<ContactSection> {
                   
                   SizedBox(height: isMobile ? 20 : 28),
                   
-                  // Social Links
-                  _SocialLinks(isMobile: isMobile),
-                ],
+                    // Social Links
+                    _SocialLinks(isMobile: isMobile),
+                  ],
+                ),
               ),
             ),
           ),

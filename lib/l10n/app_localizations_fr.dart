@@ -27,6 +27,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navContact => 'Contact';
 
   @override
+  String get heroGreeting => 'BONJOUR, JE SUIS';
+
+  @override
   String get heroName => 'Akash Zaib Malik';
 
   @override
@@ -43,6 +46,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get heroTagUIUX => 'Design UI/UX';
+
+  @override
+  String get heroCTAContact => 'Me Contacter';
+
+  @override
+  String get heroCTAProjects => 'Voir Projets';
 
   @override
   String get aboutTitle => 'À propos de moi';

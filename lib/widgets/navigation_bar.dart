@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
@@ -26,21 +27,26 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     final l10n = AppLocalizations.of(context)!;
     final isMobile = ResponsiveBuilder.isMobile(context);
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 16 : 32,
-        vertical: 16,
-      ),
-      decoration: BoxDecoration(
-        color: AppTheme.primaryBackground.withValues(alpha: 0.95),
-        border: const Border(
-          bottom: BorderSide(
-            color: AppTheme.inputBorder,
-            width: 1,
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 16 : 40,
+            vertical: isMobile ? 12 : 16,
           ),
+          decoration: BoxDecoration(
+            color: AppTheme.primaryBackground.withValues(alpha: 0.85),
+            border: Border(
+              bottom: BorderSide(
+                color: AppTheme.inputBorder.withValues(alpha: 0.5),
+                width: 1,
+              ),
+            ),
+          ),
+          child: isMobile ? _buildMobileNav(l10n) : _buildDesktopNav(l10n),
         ),
       ),
-      child: isMobile ? _buildMobileNav(l10n) : _buildDesktopNav(l10n),
     );
   }
 

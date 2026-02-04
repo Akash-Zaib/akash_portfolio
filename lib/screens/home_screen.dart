@@ -101,6 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         key: _heroKey,
                         child: HeroSection(
                           onScrollDown: _scrollToAbout,
+                          onContactTap: () => _scrollToSection('contact'),
+                          onProjectsTap: () => _scrollToSection('projects'),
                         ),
                       ),
                     ),
@@ -165,25 +167,56 @@ class _Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+    
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.symmetric(
+        vertical: isMobile ? 24 : 32,
+        horizontal: 16,
+      ),
+      decoration: BoxDecoration(
+        color: AppTheme.secondaryBackground.withValues(alpha: 0.3),
         border: Border(
-          top: BorderSide(color: AppTheme.inputBorder, width: 1),
+          top: BorderSide(
+            color: AppTheme.inputBorder.withValues(alpha: 0.5),
+            width: 1,
+          ),
         ),
       ),
       child: SafeArea(
         top: false,
-        child: Center(
-          child: Text(
-            '© ${DateTime.now().year} Akash Zaib Malik. All rights reserved.',
-            style: AppTheme.bodyMedium.copyWith(
-              color: AppTheme.textMuted,
-              fontSize: 12,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Gradient accent line
+            Container(
+              width: 60,
+              height: 3,
+              decoration: BoxDecoration(
+                gradient: AppTheme.primaryGradient,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
+            SizedBox(height: isMobile ? 16 : 20),
+            Text(
+              '© ${DateTime.now().year} Akash Zaib Malik',
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppTheme.textSecondary,
+                fontSize: isMobile ? 12 : 13,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Built with Flutter & ❤️',
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppTheme.textMuted,
+                fontSize: isMobile ? 11 : 12,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );

@@ -3,6 +3,7 @@ import '../l10n/app_localizations.dart';
 import '../config/theme.dart';
 import '../models/skill.dart';
 import 'responsive_builder.dart';
+import 'animated_entrance.dart';
 
 class SkillsSection extends StatefulWidget {
   const SkillsSection({super.key});
@@ -52,28 +53,48 @@ class _SkillsSectionState extends State<SkillsSection>
         padding: EdgeInsets.symmetric(
           vertical: isMobile ? 48 : 80,
         ),
-        child: ContentContainer(
-          child: Column(
-            children: [
-              // Section Title
-              GradientText(
-                text: l10n.skillsTitle,
-                style: isMobile ? AppTheme.headlineMedium : AppTheme.headlineLarge,
-                textAlign: TextAlign.center,
+        child: Column(
+          children: [
+            // Section Title (centered)
+            ContentContainer(
+              child: AnimatedEntrance(
+                delay: Duration.zero,
+                child: Column(
+                  children: [
+                    Text(
+                      'SKILLS',
+                      style: AppTheme.labelLarge.copyWith(
+                        color: AppTheme.primaryBlue,
+                        letterSpacing: 3,
+                        fontSize: isMobile ? 11 : 12,
+                      ),
+                    ),
+                    SizedBox(height: isMobile ? 8 : 12),
+                    GradientText(
+                      text: l10n.skillsTitle,
+                      style: isMobile ? AppTheme.headlineMedium : AppTheme.headlineLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-              
-              SizedBox(height: isMobile ? 24 : 40),
-              
-              // Skills Grid
-              _buildSkillsGrid(l10n, isMobile),
-            ],
-          ),
+            ),
+            
+            SizedBox(height: isMobile ? 28 : 48),
+            
+            // Skills Grid (FULL WIDTH)
+            FullWidthContainer(
+              child: _buildSkillsGrid(l10n, isMobile, context),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildSkillsGrid(AppLocalizations l10n, bool isMobile) {
+  Widget _buildSkillsGrid(AppLocalizations l10n, bool isMobile, BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     if (isMobile) {
       return Column(
         children: skillsList.asMap().entries.map((entry) {
@@ -93,55 +114,59 @@ class _SkillsSectionState extends State<SkillsSection>
       );
     }
 
-    final halfLength = (skillsList.length / 2).ceil();
-    final leftSkills = skillsList.sublist(0, halfLength);
-    final rightSkills = skillsList.sublist(halfLength);
+    // Determine number of columns based on screen width
+    int columnCount;
+    double spacing;
+    
+    if (screenWidth < 1024) {
+      columnCount = 2;
+      spacing = 32;
+    } else if (screenWidth < 1600) {
+      columnCount = 3;
+      spacing = 40;
+    } else {
+      columnCount = 4;
+      spacing = 48;
+    }
+    
+    // Split skills into columns
+    final List<List<Skill>> columns = List.generate(columnCount, (_) => []);
+    for (int i = 0; i < skillsList.length; i++) {
+      columns[i % columnCount].add(skillsList[i]);
+    }
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Left Column
-        Expanded(
-          child: Column(
-            children: leftSkills.asMap().entries.map((entry) {
-              final index = entry.key;
-              final skill = entry.value;
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 28),
-                child: _AnimatedSkillBar(
-                  skill: skill,
-                  l10n: l10n,
-                  animation: _controller,
-                  delay: index * 0.08,
-                  isMobile: false,
-                ),
-              );
-            }).toList(),
-          ),
-        ),
+      children: columns.asMap().entries.map((columnEntry) {
+        final columnIndex = columnEntry.key;
+        final columnSkills = columnEntry.value;
         
-        const SizedBox(width: 40),
-        
-        // Right Column
-        Expanded(
-          child: Column(
-            children: rightSkills.asMap().entries.map((entry) {
-              final index = entry.key;
-              final skill = entry.value;
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 28),
-                child: _AnimatedSkillBar(
-                  skill: skill,
-                  l10n: l10n,
-                  animation: _controller,
-                  delay: (halfLength + index) * 0.08,
-                  isMobile: false,
-                ),
-              );
-            }).toList(),
+        return Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: columnIndex == 0 ? 0 : spacing / 2,
+              right: columnIndex == columns.length - 1 ? 0 : spacing / 2,
+            ),
+            child: Column(
+              children: columnSkills.asMap().entries.map((entry) {
+                final skillIndex = entry.key;
+                final skill = entry.value;
+                final globalIndex = columnIndex + (skillIndex * columnCount);
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  child: _AnimatedSkillBar(
+                    skill: skill,
+                    l10n: l10n,
+                    animation: _controller,
+                    delay: globalIndex * 0.05,
+                    isMobile: false,
+                  ),
+                );
+              }).toList(),
+            ),
           ),
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
 }
@@ -168,29 +193,6 @@ class _AnimatedSkillBar extends StatefulWidget {
 class _AnimatedSkillBarState extends State<_AnimatedSkillBar> {
   bool _isHovered = false;
 
-  String _getLocalizedName() {
-    switch (widget.skill.nameKey) {
-      case 'skillFlutter':
-        return widget.l10n.skillFlutter;
-      case 'skillDart':
-        return widget.l10n.skillDart;
-      case 'skillFirebase':
-        return widget.l10n.skillFirebase;
-      case 'skillStateManagement':
-        return widget.l10n.skillStateManagement;
-      case 'skillCleanArchitecture':
-        return widget.l10n.skillCleanArchitecture;
-      case 'skillRestApi':
-        return widget.l10n.skillRestApi;
-      case 'skillUIUX':
-        return widget.l10n.skillUIUX;
-      case 'skillResponsive':
-        return widget.l10n.skillResponsive;
-      default:
-        return widget.skill.nameKey;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
@@ -212,9 +214,9 @@ class _AnimatedSkillBarState extends State<_AnimatedSkillBar> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    child: Text(
-                      _getLocalizedName(),
+                    Flexible(
+                      child: Text(
+                        widget.skill.name,
                       style: AppTheme.titleMedium.copyWith(
                         color: _isHovered ? widget.skill.progressColor : AppTheme.textPrimary,
                         fontSize: widget.isMobile ? 14 : 16,

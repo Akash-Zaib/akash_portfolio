@@ -6,6 +6,7 @@ import '../config/theme.dart';
 import '../config/constants.dart';
 import '../services/download_service.dart';
 import 'responsive_builder.dart';
+import 'animated_entrance.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
@@ -26,15 +27,31 @@ class AboutSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Section Title
-              Center(
-                child: GradientText(
-                  text: l10n.aboutTitle,
-                  style: isMobile ? AppTheme.headlineMedium : AppTheme.headlineLarge,
-                  textAlign: TextAlign.center,
+              AnimatedEntrance(
+                delay: Duration.zero,
+                child: Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'ABOUT',
+                        style: AppTheme.labelLarge.copyWith(
+                          color: AppTheme.primaryBlue,
+                          letterSpacing: 3,
+                          fontSize: isMobile ? 11 : 12,
+                        ),
+                      ),
+                      SizedBox(height: isMobile ? 8 : 12),
+                      GradientText(
+                        text: l10n.aboutTitle,
+                        style: isMobile ? AppTheme.headlineMedium : AppTheme.headlineLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               
-              SizedBox(height: isMobile ? 24 : 40),
+              SizedBox(height: isMobile ? 28 : 48),
               
               // About Content
               if (isMobile)
@@ -53,63 +70,81 @@ class AboutSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Description
-        Text(
-          l10n.aboutDescription,
-          style: AppTheme.bodyLarge.copyWith(
-            height: 1.7,
-            fontSize: 14,
+        AnimatedEntrance(
+          delay: const Duration(milliseconds: 100),
+          child: Text(
+            l10n.aboutDescription,
+            style: AppTheme.bodyLarge.copyWith(
+              height: 1.7,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
         ),
         
         const SizedBox(height: 24),
         
         // Info Cards
-        _InfoCard(
-          icon: FontAwesomeIcons.graduationCap,
-          title: l10n.aboutEducation,
-          content: '${l10n.aboutEducationDegree}\n${l10n.aboutEducationUniversity}\n${l10n.aboutEducationCGPA}',
-          isMobile: true,
+        AnimatedEntrance(
+          delay: const Duration(milliseconds: 200),
+          child: _InfoCard(
+            icon: FontAwesomeIcons.graduationCap,
+            title: l10n.aboutEducation,
+            content: '${l10n.aboutEducationDegree}\n${l10n.aboutEducationUniversity}\n${l10n.aboutEducationCGPA}',
+            isMobile: true,
+          ),
         ),
         
         const SizedBox(height: 12),
         
-        _InfoCard(
-          icon: FontAwesomeIcons.locationDot,
-          title: l10n.aboutLocation,
-          content: AppConstants.location,
-          isMobile: true,
+        AnimatedEntrance(
+          delay: const Duration(milliseconds: 280),
+          child: _InfoCard(
+            icon: FontAwesomeIcons.locationDot,
+            title: l10n.aboutLocation,
+            content: AppConstants.location,
+            isMobile: true,
+          ),
         ),
         
         const SizedBox(height: 12),
         
-        _InfoCard(
-          icon: FontAwesomeIcons.envelope,
-          title: l10n.contactEmail,
-          content: AppConstants.email,
-          onTap: () => _launchEmail(),
-          isMobile: true,
+        AnimatedEntrance(
+          delay: const Duration(milliseconds: 360),
+          child: _InfoCard(
+            icon: FontAwesomeIcons.envelope,
+            title: l10n.contactEmail,
+            content: AppConstants.email,
+            onTap: () => _launchEmail(),
+            isMobile: true,
+          ),
         ),
         
         const SizedBox(height: 12),
         
-        _InfoCard(
-          icon: FontAwesomeIcons.phone,
-          title: l10n.aboutPhone,
-          content: AppConstants.phone,
-          onTap: () => _launchPhone(),
-          isMobile: true,
+        AnimatedEntrance(
+          delay: const Duration(milliseconds: 440),
+          child: _InfoCard(
+            icon: FontAwesomeIcons.phone,
+            title: l10n.aboutPhone,
+            content: AppConstants.phone,
+            onTap: () => _launchPhone(),
+            isMobile: true,
+          ),
         ),
         
         const SizedBox(height: 24),
         
         // CV Download Button
-        Center(
-          child: _DownloadCVButton(
-            downloadLabel: l10n.downloadCV,
-            downloadingLabel: l10n.downloadingCV,
-            downloadedLabel: l10n.downloadedCV,
-            isMobile: true,
+        AnimatedEntrance(
+          delay: const Duration(milliseconds: 520),
+          child: Center(
+            child: _DownloadCVButton(
+              downloadLabel: l10n.downloadCV,
+              downloadingLabel: l10n.downloadingCV,
+              downloadedLabel: l10n.downloadedCV,
+              isMobile: true,
+            ),
           ),
         ),
       ],
@@ -126,67 +161,86 @@ class AboutSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                l10n.aboutDescription,
-                style: AppTheme.bodyLarge.copyWith(
-                  height: 1.8,
+              AnimatedEntrance(
+                delay: const Duration(milliseconds: 100),
+                child: Text(
+                  l10n.aboutDescription,
+                  style: AppTheme.bodyLarge.copyWith(
+                    height: 1.8,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 32),
+              
+              // Education Card
+              AnimatedEntrance(
+                delay: const Duration(milliseconds: 200),
+                child: _InfoCard(
+                  icon: FontAwesomeIcons.graduationCap,
+                  title: l10n.aboutEducation,
+                  content: '${l10n.aboutEducationDegree}\n${l10n.aboutEducationUniversity}\n${l10n.aboutEducationCGPA}',
+                  isMobile: false,
                 ),
               ),
               
               const SizedBox(height: 28),
               
-              // Education Card
-              _InfoCard(
-                icon: FontAwesomeIcons.graduationCap,
-                title: l10n.aboutEducation,
-                content: '${l10n.aboutEducationDegree}\n${l10n.aboutEducationUniversity}\n${l10n.aboutEducationCGPA}',
-                isMobile: false,
-              ),
-              
-              const SizedBox(height: 28),
-              
-              _DownloadCVButton(
-                downloadLabel: l10n.downloadCV,
-                downloadingLabel: l10n.downloadingCV,
-                downloadedLabel: l10n.downloadedCV,
-                isMobile: false,
+              AnimatedEntrance(
+                delay: const Duration(milliseconds: 300),
+                child: _DownloadCVButton(
+                  downloadLabel: l10n.downloadCV,
+                  downloadingLabel: l10n.downloadingCV,
+                  downloadedLabel: l10n.downloadedCV,
+                  isMobile: false,
+                ),
               ),
             ],
           ),
         ),
         
-        const SizedBox(width: 40),
+        const SizedBox(width: 48),
         
         // Right side - Contact Info
         Expanded(
           flex: 2,
           child: Column(
             children: [
-              _InfoCard(
-                icon: FontAwesomeIcons.locationDot,
-                title: l10n.aboutLocation,
-                content: AppConstants.location,
-                isMobile: false,
+              AnimatedEntrance(
+                delay: const Duration(milliseconds: 150),
+                child: _InfoCard(
+                  icon: FontAwesomeIcons.locationDot,
+                  title: l10n.aboutLocation,
+                  content: AppConstants.location,
+                  isMobile: false,
+                ),
               ),
               
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               
-              _InfoCard(
-                icon: FontAwesomeIcons.envelope,
-                title: l10n.contactEmail,
-                content: AppConstants.email,
-                onTap: () => _launchEmail(),
-                isMobile: false,
+              AnimatedEntrance(
+                delay: const Duration(milliseconds: 230),
+                child: _InfoCard(
+                  icon: FontAwesomeIcons.envelope,
+                  title: l10n.contactEmail,
+                  content: AppConstants.email,
+                  onTap: () => _launchEmail(),
+                  isMobile: false,
+                ),
               ),
               
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               
-              _InfoCard(
-                icon: FontAwesomeIcons.phone,
-                title: l10n.aboutPhone,
-                content: AppConstants.phone,
-                onTap: () => _launchPhone(),
-                isMobile: false,
+              AnimatedEntrance(
+                delay: const Duration(milliseconds: 310),
+                child: _InfoCard(
+                  icon: FontAwesomeIcons.phone,
+                  title: l10n.aboutPhone,
+                  content: AppConstants.phone,
+                  onTap: () => _launchPhone(),
+                  isMobile: false,
+                ),
               ),
             ],
           ),
