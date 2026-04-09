@@ -6,6 +6,7 @@ import '../models/project.dart';
 import '../screens/project_detail_screen.dart';
 import 'responsive_builder.dart';
 import 'animated_entrance.dart';
+import '../utils/asset_path.dart';
 
 class ProjectsSection extends StatefulWidget {
   const ProjectsSection({super.key});
@@ -345,7 +346,7 @@ class _ProjectCardState extends State<_ProjectCard> {
           children: [
             // Project thumbnail (imagePath was previously unused; cards showed icon only)
             Image.asset(
-              _resolveAssetPath(widget.project.imagePath),
+              assetPathForImage(widget.project.imagePath),
               fit: BoxFit.cover,
               alignment: Alignment.center,
               errorBuilder: (context, error, stackTrace) {
@@ -505,16 +506,6 @@ class _ProjectCardState extends State<_ProjectCard> {
     );
   }
 
-  String _resolveAssetPath(String path) {
-    final normalized = path.replaceAll('\\', '/').trim();
-    if (normalized.startsWith('assets/assets/')) {
-      return normalized.replaceFirst('assets/assets/', 'assets/');
-    }
-    if (normalized.startsWith('assets/')) {
-      return normalized;
-    }
-    return 'assets/$normalized';
-  }
 }
 
 class _TechTag extends StatelessWidget {

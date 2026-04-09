@@ -5,6 +5,7 @@ import '../models/project.dart';
 import '../widgets/responsive_builder.dart';
 import '../widgets/animated_entrance.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/asset_path.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
   final Project project;
@@ -205,7 +206,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
         ),
       ),
       child: Image.asset(
-        _resolveAssetPath(widget.project.heroImage),
+        assetPathForImage(widget.project.heroImage),
         fit: BoxFit.contain,
         alignment: Alignment.center,
         errorBuilder: (context, error, stackTrace) {
@@ -455,7 +456,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
                             child: Padding(
                               padding: EdgeInsets.all(isMobile ? 12 : 16),
                               child: Image.asset(
-                                _resolveAssetPath(widget.project.galleryImages[index]),
+                                assetPathForImage(widget.project.galleryImages[index]),
                                 fit: BoxFit.contain,
                                 alignment: Alignment.center,
                                 errorBuilder: (context, error, stackTrace) {
@@ -903,14 +904,4 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
     );
   }
 
-  String _resolveAssetPath(String path) {
-    final normalized = path.replaceAll('\\', '/').trim();
-    if (normalized.startsWith('assets/assets/')) {
-      return normalized.replaceFirst('assets/assets/', 'assets/');
-    }
-    if (normalized.startsWith('assets/')) {
-      return normalized;
-    }
-    return 'assets/$normalized';
-  }
 }

@@ -46,4 +46,7 @@ flutter:
     - assets/images/lookbook/
     - assets/images/lookbook/images/
     - assets/images/isoar/
+    - assets/images/expenseTracker/
+    - assets/images/bienance/
+    - assets/images/oosc/
     - assets/documents/

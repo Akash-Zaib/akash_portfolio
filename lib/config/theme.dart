@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../utils/asset_path.dart';
 
 class AppTheme {
   // Primary Colors - Dark Theme
@@ -505,7 +506,7 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget>
               child: ClipOval(
                 child: widget.imagePath != null
                     ? Image.asset(
-                        widget.imagePath!,
+                        assetPathForImage(widget.imagePath!),
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
                       )

@@ -92,12 +92,15 @@ The architecture leverages MobX state management for scalable, clean, and mainta
     role: 'Flutter Developer',
     client: 'NGO/Non-profit Organization',
 
-    imagePath: 'assets/images/oosc.png',
-    heroImage: 'assets/images/project_oosc_hero.png',
+    imagePath: 'assets/images/oosc/image.png',
+    heroImage: 'assets/images/oosc/image.png',
     galleryImages: [
-      'assets/images/project_oosc_1.png',
-      'assets/images/project_oosc_2.png',
-      'assets/images/project_oosc_3.png',
+      'assets/images/oosc/image.png',
+      'assets/images/oosc/WhatsApp Image 2026-04-09 at 5.24.55 PM.jpeg',
+      'assets/images/oosc/WhatsApp Image 2026-04-09 at 5.24.56 PM.jpeg',
+      'assets/images/oosc/WhatsApp Image 2026-04-09 at 5.24.56 PM (1).jpeg',
+      'assets/images/oosc/WhatsApp Image 2026-04-09 at 5.24.56 PM (2).jpeg',
+      'assets/images/oosc/WhatsApp Image 2026-04-09 at 5.24.56 PM (3).jpeg',
     ],
     techStack: [
       'Flutter',
@@ -222,7 +225,7 @@ Applied Flutter best practices for widget composition, layout optimization, and 
   // ─────────────────────────────────────────────────────────
   Project(
     id: 'lookbook',
-    title: 'LOOKBOOK - Fashion App',
+    title: 'LOOKBOOK - Fashion App - Flutter',
 
     // 📱 CARD (Main Screen)
     shortDescription:
@@ -304,171 +307,241 @@ Ensured real-time data updates using Firebase Firestore, providing a seamless an
   // ─────────────────────────────────────────────────────────
   // PROJECT 4: FitTrack - Fitness App
   // ─────────────────────────────────────────────────────────
-  //   Project(
-  //     id: 'fittrack',
-  //     title: 'FitTrack - Fitness Companion',
-  //     shortDescription: 'Fitness tracking with workout plans and health API integration.',
-  //     fullDescription: '''A comprehensive fitness tracking application designed to help users achieve their health goals through personalized workout plans, detailed progress tracking, and social motivation features.
+  Project(
+    id: 'expense_tracker',
+    title: 'Expense Tracker - Personal Finance App',
+
+    // 📱 CARD (Main Screen)
+    shortDescription:
+        'A Flutter-based expense tracker with Firebase backend for managing income, expenses, budgets, and financial insights in a clean and user-friendly way.',
+
+    // 📄 DETAIL PAGE
+    fullDescription:
+        '''Developed a modern personal finance mobile application using Flutter for the frontend and Firebase as the backend solution. The app is designed to help users manage their daily expenses, track income, monitor budgets, and gain better control over their financial activities through a clean and intuitive interface.
+
+The application allows users to add, edit, delete, and categorize expenses efficiently while maintaining a structured record of all financial transactions. Users can also track income sources, monitor spending patterns, and review transaction history with smooth filtering and organized lists.
+
+Firebase was used as the backend to handle real-time data storage, user authentication, and cloud-based sync, ensuring secure and seamless access to financial records across sessions. The app architecture was built to provide responsive UI performance, scalable data handling, and a smooth user experience.
+
+To improve financial understanding, the application includes charts, summaries, and reporting views that visually present spending habits, income trends, and category-wise breakdowns. The overall design focuses on usability, fast input workflows, and clear presentation of personal finance data for day-to-day expense management.''',
+
+    role: 'Flutter Developer',
+    client: 'Personal / Fintech Project',
+
+    imagePath: 'assets/images/expenseTracker/main.png',
+    heroImage: 'assets/images/expenseTracker/main.png',
+    galleryImages: [
+      'assets/images/expenseTracker/main.png',
+      'assets/images/expenseTracker/image1.png',
+      'assets/images/expenseTracker/image2.png',
+      'assets/images/expenseTracker/image3.png',
+      'assets/images/expenseTracker/image4.jpg',
+      'assets/images/expenseTracker/image5.jpg',
+    ],
+
+    techStack: [
+      'Flutter',
+      'Dart',
+      'Firebase',
+      'Firebase Auth',
+      'Cloud Firestore',
+      'GetX',
+      'Charts',
+    ],
+
+    features: [
+      'Add, edit, and delete expenses بسهولة',
+      'Income and expense tracking',
+      'Category-based expense management',
+      'Budget monitoring and financial planning',
+      'Real-time data sync with Firebase',
+      'User authentication and secure data access',
+      'Transaction history with filters',
+      'Financial summaries and charts',
+      'Clean and responsive mobile UI',
+    ],
+
+    responsibilities: [
+      'Developed complete frontend UI using Flutter',
+      'Integrated Firebase backend for real-time data storage',
+      'Implemented authentication and secure user access',
+      'Built expense and income management workflows',
+      'Designed transaction history and category-based tracking screens',
+      'Created charts and analytics views for financial insights',
+      'Structured app flow for smooth and intuitive user experience',
+      'Optimized UI responsiveness and data handling performance',
+    ],
+
+    challenges: [
+      'Managing real-time financial data efficiently with Firebase',
+      'Designing a simple but informative finance dashboard',
+      'Maintaining smooth UX for frequent data entry and updates',
+      'Presenting financial reports in a clear and user-friendly way',
+    ],
+
+    results: [
+      'Delivered a complete expense tracking solution with cloud-backed storage',
+      'Improved finance management through clean transaction workflows',
+      'Provided users with clear spending insights and reporting features',
+    ],
+
+    accentColor: AppTheme.accentTeal,
+    icon: Icons.account_balance_wallet_rounded,
+  ),
+
+  // Project(
+  //   id: 'fittrack',
+  //   title: 'FitTrack - Fitness Companion',
+  //   shortDescription:
+  //       'Fitness tracking with workout plans and health API integration.',
+  //   fullDescription:
+  //       '''A comprehensive fitness tracking application designed to help users achieve their health goals through personalized workout plans, detailed progress tracking, and social motivation features.
 
   // The app integrates with device health APIs to provide accurate activity data, including steps, heart rate, and sleep patterns. Advanced charting visualizes progress over time.''',
 
-  //     role: 'Full Stack Flutter Developer',
-  //     duration: 'Feb 2024 - Present',
+  //   role: 'Full Stack Flutter Developer',
+  //   duration: 'Feb 2024 - Present',
 
-  //     imagePath: 'assets/images/fittrack.png',
-  //     heroImage: 'assets/images/project_fittrack_hero.png',
-  //     galleryImages: [],
-  //     techStack: ['Flutter', 'GetX', 'Health API', 'SQLite', 'Charts'],
-  //     features: [
-  //       'Custom workout plan builder',
-  //       'Progress tracking with charts',
-  //       'Calorie & nutrition counter',
-  //       'Social challenges & leaderboards',
-  //       'Health API integration',
-  //     ],
-  //     accentColor: AppTheme.accentTeal,
-  //     icon: Icons.fitness_center_rounded,
-  //   ),
+  //   imagePath: 'assets/images/fittrack.png',
+  //   heroImage: 'assets/images/project_fittrack_hero.png',
+  //   galleryImages: [],
+  //   techStack: ['Flutter', 'GetX', 'Health API', 'SQLite', 'Charts'],
+  //   features: [
+  //     'Custom workout plan builder',
+  //     'Progress tracking with charts',
+  //     'Calorie & nutrition counter',
+  //     'Social challenges & leaderboards',
+  //     'Health API integration',
+  //   ],
+  //   accentColor: AppTheme.accentTeal,
+  //   icon: Icons.fitness_center_rounded,
+  // ),
 
-  //   // ─────────────────────────────────────────────────────────
-  //   // PROJECT 5: FoodieHub - Restaurant App
-  //   // ─────────────────────────────────────────────────────────
-  //   Project(
-  //     id: 'foodiehub',
-  //     title: 'FoodieHub - Food Delivery',
-  //     shortDescription: 'Food delivery platform with real-time tracking and payments.',
-  //     fullDescription: '''A complete food delivery ecosystem connecting hungry customers with local restaurants. Features a customer app, restaurant dashboard, and delivery driver application.
+  // ─────────────────────────────────────────────────────────
+  // PROJECT 5: FoodieHub - Restaurant App
+  // ─────────────────────────────────────────────────────────
+  Project(
+    id: 'binance',
+    title: 'Binance - Distribution Management App',
 
-  // Real-time order tracking using Google Maps integration provides accurate delivery ETAs. Multiple payment gateways including Stripe and local payment methods ensure seamless transactions.''',
+    // 📱 CARD (Main Screen)
+    shortDescription:
+        'A role-based distribution management app for managers, customers, and salesmen with streamlined order processing, product management, and API-driven operational tracking.',
 
-  //     role: 'Mobile App Developer',
+    // 📄 DETAIL PAGE
+    fullDescription:
+        '''Developed a role-based distribution management mobile application designed to support managers, customers, and salesmen through dedicated workflows and a structured operational system. The application streamlines product distribution, customer ordering, sales activities, and management oversight within a single connected platform.
 
-  //     imagePath: 'assets/images/foodiehub.png',
-  //     heroImage: 'assets/images/project_foodiehub_hero.png',
-  //     galleryImages: [],
-  //     techStack: ['Flutter', 'Node.js', 'MongoDB', 'Stripe', 'Google Maps'],
-  //     features: [
-  //       'Real-time order tracking',
-  //       'Multiple payment options',
-  //       'Restaurant dashboard',
-  //       'Push notifications',
-  //       'Reviews & ratings system',
-  //     ],
-  //     accentColor: AppTheme.primaryBlue,
-  //     icon: Icons.restaurant_rounded,
-  //   ),
+The customer side of the app enables users to browse products, review item details, place orders, and track order-related activities through a smooth and user-friendly interface. The salesman module supports field operations by helping sales representatives manage customer interactions, process orders, and maintain clear visibility into product and sales workflows.
 
-  //   // ─────────────────────────────────────────────────────────
-  //   // PROJECT 6: MediCare - Health App
-  //   // ─────────────────────────────────────────────────────────
-  //   Project(
-  //     id: 'medicare',
-  //     title: 'MediCare - Health Management',
-  //     shortDescription: 'Healthcare app with appointments and video consultations.',
-  //     fullDescription: '''A comprehensive healthcare management solution enabling patients to book appointments, store medical records securely, receive medication reminders, and conduct telemedicine consultations.
+The manager panel provides centralized control over distribution activities, operational monitoring, and business processes. It allows managers to oversee orders, monitor sales performance, review operational data, and manage the overall flow of the system more efficiently.
 
-  // Integrated Agora SDK provides crystal-clear video consultations between patients and healthcare providers, with end-to-end encryption ensuring HIPAA compliance.''',
+MongoDB was used as the backend database for storing products, customer records, order details, sales information, and operational data in a scalable structure. REST APIs were integrated to connect the Flutter application with backend services, enabling dynamic data fetching, order submission, status updates, and role-based business logic execution. The system follows an API-driven architecture that supports smooth communication between mobile interfaces and backend services.
 
-  //     role: 'Flutter Developer',
+MobX state management was used on the frontend to manage reactive application state, synchronize UI with backend responses, and maintain clean separation between business logic and presentation layers. The overall architecture was built with a focus on scalability, maintainability, and responsive performance across different workflows and user roles.
 
-  //     imagePath: 'assets/images/medicare.png',
-  //     heroImage: 'assets/images/project_medicare_hero.png',
-  //     galleryImages: [],
-  //     techStack: ['Flutter', 'Firebase', 'Agora SDK', 'Cloud Functions'],
-  //     features: [
-  //       'Doctor appointment booking',
-  //       'Medical records storage',
-  //       'Medication reminders',
-  //       'Video consultations',
-  //       'Prescription management',
-  //     ],
-  //     accentColor: AppTheme.primaryPurple,
-  //     icon: Icons.health_and_safety_rounded,
-  //   ),
+The complete product experience helps improve distribution efficiency, simplifies order handling, and creates a more organized system for medical and business distribution operations.''',
 
-  //   // ─────────────────────────────────────────────────────────
-  //   // PROJECT 7: TravelMate - Travel App
-  //   // ─────────────────────────────────────────────────────────
-  //   Project(
-  //     id: 'travelmate',
-  //     title: 'TravelMate - Trip Planner',
-  //     shortDescription: 'Travel planning with itineraries and offline maps.',
-  //     fullDescription: '''An all-in-one travel companion that transforms trip planning from stressful to seamless. Build detailed itineraries, book flights and hotels, discover local guides, and track expenses all in one place.
+    role: 'Flutter Developer',
+    client: 'Distribution / Medical Supply Business',
 
-  // Offline maps and guides ensure you're never lost, even without internet connectivity. The expense tracker automatically categorizes spending and converts currencies in real-time.''',
+    imagePath: 'assets/images/bienance/image.png',
+    heroImage: 'assets/images/bienance/image.png',
+    galleryImages: [
+      'assets/images/bienance/image.png',
+      'assets/images/bienance/image1.png',
+      'assets/images/bienance/image3.png',
+      'assets/images/bienance/image4.png',
+      'assets/images/bienance/image5.png',
+    ],
 
-  //     role: 'Lead Developer',
+    techStack: [
+      'Flutter',
+      'Dart',
+      'MobX',
+      'MongoDB',
+      'REST APIs',
+      'API Integration',
+      'Backend Services',
+      'Role-Based Architecture',
+      'State Management',
+    ],
 
-  //     imagePath: 'assets/images/travelmate.png',
-  //     heroImage: 'assets/images/project_travelmate_hero.png',
-  //     galleryImages: [],
-  //     techStack: ['Flutter', 'Riverpod', 'REST APIs', 'Google Places', 'Hive'],
-  //     features: [
-  //       'Smart itinerary builder',
-  //       'Flight & hotel integration',
-  //       'Offline maps & guides',
-  //       'Expense tracker',
-  //       'Photo journal',
-  //     ],
-  //     accentColor: AppTheme.accentTeal,
-  //     icon: Icons.travel_explore_rounded,
-  //   ),
+    features: [
+      'Role-based access for Manager, Customer, and Salesman',
+      'Customer product browsing and ordering flow',
+      'Salesman order handling and customer management',
+      'Manager dashboard for operational control',
+      'Order processing and distribution workflow',
+      'Product and item management',
+      'API-driven dynamic data flow',
+      'Reactive UI updates with MobX',
+      'Clean and responsive mobile UI',
+    ],
 
-  //   // ─────────────────────────────────────────────────────────
-  //   // PROJECT 8: GameZone - Gaming Platform
-  //   // ─────────────────────────────────────────────────────────
-  //   Project(
-  //     id: 'gamezone',
-  //     title: 'GameZone - eSports Platform',
-  //     shortDescription: 'eSports tournaments with live streaming and team management.',
-  //     fullDescription: '''The ultimate eSports tournament platform for competitive gaming communities. Organize tournaments, manage teams, stream live matches, and distribute prizes seamlessly.
+    responsibilities: [
+      'Developed role-based mobile UI for Manager, Customer, and Salesman panels',
+      'Built customer ordering and product browsing workflows',
+      'Implemented salesman-side order and customer handling features',
+      'Created manager dashboard screens for monitoring operations',
+      'Structured order processing and distribution flow screens',
+      'Integrated REST APIs for dynamic data communication',
+      'Connected Flutter app with MongoDB-backed backend services',
+      'Implemented MobX state management for reactive data handling',
+      'Managed API response states, loading flows, and UI synchronization',
+      'Maintained reusable UI components for scalability and consistency',
+      'Optimized app structure for smooth role-based navigation',
+    ],
 
-  // WebSocket integration enables real-time bracket updates and live chat during matches. Twitch API integration allows streaming directly within the app.''',
+    challenges: [
+      'Managing multiple user roles with separate workflows',
+      'Designing a clean and simple order process across different user types',
+      'Integrating REST APIs for dynamic order and product data',
+      'Maintaining UI consistency while supporting different permissions',
+      'Handling reactive state updates efficiently with MobX',
+      'Organizing product, sales, and operational data with MongoDB in a scalable way',
+    ],
 
-  //     role: 'Full Stack Developer',
+    results: [
+      'Delivered a complete multi-role distribution management solution',
+      'Improved operational visibility for managers and sales teams',
+      'Simplified customer ordering and sales workflow handling',
+      'Enabled backend-driven workflows using MongoDB and REST APIs',
+      'Achieved cleaner frontend state handling through MobX architecture',
+    ],
 
-  //     imagePath: 'assets/images/gamezone.png',
-  //     heroImage: 'assets/images/project_gamezone_hero.png',
-  //     galleryImages: [],
-  //     techStack: ['Flutter', 'WebSocket', 'Firebase', 'Twitch API', 'Stripe'],
-  //     features: [
-  //       'Tournament brackets',
-  //       'Live stream integration',
-  //       'Team management',
-  //       'Leaderboards & stats',
-  //       'Prize distribution',
-  //     ],
-  //     accentColor: AppTheme.accentPink,
-  //     icon: Icons.sports_esports_rounded,
-  //   ),
+    accentColor: AppTheme.primaryBlue,
+    icon: Icons.local_shipping_rounded,
+  ),
+  // ─────────────────────────────────────────────────────────
+  // PROJECT 9: EduLearn - E-Learning Platform
+  // ─────────────────────────────────────────────────────────
+  Project(
+    id: 'edulearn',
+    title: 'EduLearn - Online Courses',
+    shortDescription:
+        'E-learning platform with video courses and certificates.',
+    fullDescription:
+        '''A feature-rich e-learning platform offering video courses, interactive quizzes, progress tracking, and certificate generation. Supports multiple languages and offline viewing for learning anywhere.
 
-  //   // ─────────────────────────────────────────────────────────
-  //   // PROJECT 9: EduLearn - E-Learning Platform
-  //   // ─────────────────────────────────────────────────────────
-  //   Project(
-  //     id: 'edulearn',
-  //     title: 'EduLearn - Online Courses',
-  //     shortDescription: 'E-learning platform with video courses and certificates.',
-  //     fullDescription: '''A feature-rich e-learning platform offering video courses, interactive quizzes, progress tracking, and certificate generation. Supports multiple languages and offline viewing for learning anywhere.
+  Built with scalability in mind using BLoC pattern, the app handles thousands of concurrent users while maintaining smooth video playback and instant quiz feedback.''',
 
-  // Built with scalability in mind using BLoC pattern, the app handles thousands of concurrent users while maintaining smooth video playback and instant quiz feedback.''',
+    role: 'Mobile Developer',
 
-  //     role: 'Mobile Developer',
-
-  //     imagePath: 'assets/images/edulearn.png',
-  //     heroImage: 'assets/images/project_edulearn_hero.png',
-  //     galleryImages: [],
-  //     techStack: ['Flutter', 'BLoC', 'AWS', 'Video Player', 'SQLite'],
-  //     features: [
-  //       'Video course streaming',
-  //       'Interactive quizzes',
-  //       'Progress tracking',
-  //       'Certificates generation',
-  //       'Offline downloads',
-  //     ],
-  //     accentColor: AppTheme.primaryBlue,
-  //     icon: Icons.menu_book_rounded,
-  //   ),
+    imagePath: 'assets/images/edulearn.png',
+    heroImage: 'assets/images/project_edulearn_hero.png',
+    galleryImages: [],
+    techStack: ['Flutter', 'BLoC', 'AWS', 'Video Player', 'SQLite'],
+    features: [
+      'Video course streaming',
+      'Interactive quizzes',
+      'Progress tracking',
+      'Certificates generation',
+      'Offline downloads',
+    ],
+    accentColor: AppTheme.primaryBlue,
+    icon: Icons.menu_book_rounded,
+  ),
 
   // ─────────────────────────────────────────────────────────
   // 🆕 ADD NEW PROJECTS - TEMPLATE:
