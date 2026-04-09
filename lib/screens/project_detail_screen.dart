@@ -22,6 +22,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _entranceController;
   late ScrollController _scrollController;
+  late PageController _galleryPageController;
   int _selectedImageIndex = 0;
   double _scrollOffset = 0;
 
@@ -38,6 +39,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
           _scrollOffset = _scrollController.offset;
         });
       });
+    _galleryPageController = PageController();
     
     Future.delayed(const Duration(milliseconds: 100), () {
       if (mounted) {
@@ -50,6 +52,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
   void dispose() {
     _entranceController.dispose();
     _scrollController.dispose();
+    _galleryPageController.dispose();
     super.dispose();
   }
 
@@ -109,8 +112,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
   }
 
   Widget _buildHeroSection(bool isMobile, bool isTablet, double screenWidth, AppLocalizations l10n) {
-    final heroHeight = isMobile ? 300.0 : isTablet ? 400.0 : 500.0;
-    final parallaxOffset = _scrollOffset * 0.5;
+    final heroHeight = isMobile ? 320.0 : isTablet ? 420.0 : 540.0;
+    final parallaxOffset = _scrollOffset * 0.2;
     
     return _buildAnimatedElement(
       delay: 0.0,
@@ -202,8 +205,9 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
         ),
       ),
       child: Image.asset(
-        widget.project.heroImage,
-        fit: BoxFit.cover,
+        _resolveAssetPath(widget.project.heroImage),
+        fit: BoxFit.contain,
+        alignment: Alignment.center,
         errorBuilder: (context, error, stackTrace) {
           // Fallback gradient with icon
           return Container(
@@ -426,7 +430,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
             
             // Main gallery image
             AspectRatio(
-              aspectRatio: 16 / 9,
+              aspectRatio: _getGalleryAspectRatio(isMobile, isTablet),
               child: Container(
                 decoration: BoxDecoration(
                   color: AppTheme.cardBackground,
@@ -435,84 +439,137 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(AppConstants.radiusLG - 1),
-                  child: Image.asset(
-                    widget.project.galleryImages[_selectedImageIndex],
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return _buildPlaceholderImage();
-                    },
+                  child: Stack(
+                    children: [
+                      PageView.builder(
+                        controller: _galleryPageController,
+                        itemCount: widget.project.galleryImages.length,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _selectedImageIndex = index;
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          return Container(
+                            color: AppTheme.cardBackground,
+                            child: Padding(
+                              padding: EdgeInsets.all(isMobile ? 12 : 16),
+                              child: Image.asset(
+                                _resolveAssetPath(widget.project.galleryImages[index]),
+                                fit: BoxFit.contain,
+                                alignment: Alignment.center,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return _buildPlaceholderImage();
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      if (widget.project.galleryImages.length > 1) ...[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: _buildCarouselArrow(
+                            icon: Icons.chevron_left_rounded,
+                            isMobile: isMobile,
+                            onTap: () {
+                              final target = (_selectedImageIndex - 1)
+                                  .clamp(0, widget.project.galleryImages.length - 1);
+                              _galleryPageController.animateToPage(
+                                target,
+                                duration: const Duration(milliseconds: 280),
+                                curve: Curves.easeOutCubic,
+                              );
+                            },
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: _buildCarouselArrow(
+                            icon: Icons.chevron_right_rounded,
+                            isMobile: isMobile,
+                            onTap: () {
+                              final target = (_selectedImageIndex + 1)
+                                  .clamp(0, widget.project.galleryImages.length - 1);
+                              _galleryPageController.animateToPage(
+                                target,
+                                duration: const Duration(milliseconds: 280),
+                                curve: Curves.easeOutCubic,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ),
             ),
             
-            SizedBox(height: isMobile ? 12 : 16),
+            SizedBox(height: isMobile ? 16 : 20),
             
-            // Thumbnail row
+            // Carousel indicators
             SizedBox(
-              height: isMobile ? 60 : 80,
-              child: Row(
-                children: List.generate(
-                  widget.project.galleryImages.length,
-                  (index) => Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        right: index < widget.project.galleryImages.length - 1 
-                            ? (isMobile ? 8 : 12) 
-                            : 0,
+              height: 24,
+              child: Center(
+                child: Wrap(
+                  spacing: 8,
+                  children: List.generate(
+                    widget.project.galleryImages.length,
+                    (index) => AnimatedContainer(
+                      duration: AppTheme.quickAnimation,
+                      width: _selectedImageIndex == index ? 22 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: _selectedImageIndex == index
+                            ? widget.project.accentColor
+                            : AppTheme.inputBorder,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: _buildThumbnail(index, isMobile),
                     ),
                   ),
                 ),
               ),
             ),
             
-            SizedBox(height: isMobile ? 24 : 40),
+            SizedBox(height: isMobile ? 28 : 40),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildThumbnail(int index, bool isMobile) {
-    final isSelected = _selectedImageIndex == index;
-    
-    return GestureDetector(
-      onTap: () => setState(() => _selectedImageIndex = index),
-      child: AnimatedContainer(
-        duration: AppTheme.quickAnimation,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppConstants.radiusSM),
-          border: Border.all(
-            color: isSelected 
-                ? widget.project.accentColor 
-                : AppTheme.inputBorder,
-            width: isSelected ? 2 : 1,
-          ),
-          boxShadow: isSelected ? [
-            BoxShadow(
-              color: widget.project.accentColor.withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
+  double _getGalleryAspectRatio(bool isMobile, bool isTablet) {
+    if (isMobile) return 4 / 3;
+    if (isTablet) return 16 / 10;
+    return 16 / 9;
+  }
+
+  Widget _buildCarouselArrow({
+    required IconData icon,
+    required bool isMobile,
+    required VoidCallback onTap,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 6 : 10),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(999),
+          onTap: onTap,
+          child: Container(
+            width: isMobile ? 34 : 40,
+            height: isMobile ? 34 : 40,
+            decoration: BoxDecoration(
+              color: AppTheme.primaryBackground.withValues(alpha: 0.72),
+              shape: BoxShape.circle,
+              border: Border.all(color: AppTheme.inputBorder),
             ),
-          ] : null,
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppConstants.radiusSM - 1),
-          child: Image.asset(
-            widget.project.galleryImages[index],
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                color: AppTheme.surfaceColor,
-                child: Icon(
-                  Icons.image_outlined,
-                  color: AppTheme.textMuted,
-                  size: isMobile ? 20 : 24,
-                ),
-              );
-            },
+            child: Icon(
+              icon,
+              size: isMobile ? 20 : 24,
+              color: AppTheme.textPrimary,
+            ),
           ),
         ),
       ),
@@ -844,5 +901,16 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
         );
       },
     );
+  }
+
+  String _resolveAssetPath(String path) {
+    final normalized = path.replaceAll('\\', '/').trim();
+    if (normalized.startsWith('assets/assets/')) {
+      return normalized.replaceFirst('assets/assets/', 'assets/');
+    }
+    if (normalized.startsWith('assets/')) {
+      return normalized;
+    }
+    return 'assets/$normalized';
   }
 }

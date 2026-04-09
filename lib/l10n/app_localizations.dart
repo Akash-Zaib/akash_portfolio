@@ -160,6 +160,60 @@ abstract class AppLocalizations {
   /// **'Mobile App Developer (Flutter)'**
   String get heroRole;
 
+  /// No description provided for @heroTitleSenior.
+  ///
+  /// In en, this message translates to:
+  /// **'Senior Software Engineer'**
+  String get heroTitleSenior;
+
+  /// No description provided for @heroSubtitleMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Senior Mobile App Developer specializing in Flutter, React Native, and hybrid cross-platform apps for Android, iOS, Web, and Desktop.'**
+  String get heroSubtitleMobile;
+
+  /// No description provided for @heroMiniBio.
+  ///
+  /// In en, this message translates to:
+  /// **'I build polished Flutter apps with scalable architecture, smooth UX, and reliable performance from concept to production.'**
+  String get heroMiniBio;
+
+  /// No description provided for @platformFlutter.
+  ///
+  /// In en, this message translates to:
+  /// **'Flutter'**
+  String get platformFlutter;
+
+  /// No description provided for @platformReactNative.
+  ///
+  /// In en, this message translates to:
+  /// **'React Native'**
+  String get platformReactNative;
+
+  /// No description provided for @platformAndroid.
+  ///
+  /// In en, this message translates to:
+  /// **'Android'**
+  String get platformAndroid;
+
+  /// No description provided for @platformIos.
+  ///
+  /// In en, this message translates to:
+  /// **'iOS'**
+  String get platformIos;
+
+  /// No description provided for @platformWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Web'**
+  String get platformWeb;
+
+  /// No description provided for @platformDesktop.
+  ///
+  /// In en, this message translates to:
+  /// **'Desktop'**
+  String get platformDesktop;
+
   /// No description provided for @heroTagFlutter.
   ///
   /// In en, this message translates to:

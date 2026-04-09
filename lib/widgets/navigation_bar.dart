@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_localizations.dart';
 import '../config/theme.dart';
 import '../config/constants.dart';
@@ -78,6 +80,8 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
             _NavItem(label: l10n.navSkills, onTap: () => widget.onNavItemTap('skills')),
             _NavItem(label: l10n.navContact, onTap: () => widget.onNavItemTap('contact')),
             const SizedBox(width: 16),
+            const _TopSocialLinks(),
+            const SizedBox(width: 12),
             const _LanguageDropdown(),
           ],
         ),
@@ -107,6 +111,8 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
             // Menu and Language
             Row(
               children: [
+                const _TopSocialLinks(compact: true),
+                const SizedBox(width: 8),
                 const _LanguageDropdown(compact: true),
                 const SizedBox(width: 8),
                 IconButton(
@@ -327,6 +333,113 @@ class _LanguageDropdown extends StatelessWidget {
           ),
         );
       }).toList(),
+    );
+  }
+}
+
+class _TopSocialLinks extends StatelessWidget {
+  final bool compact;
+
+  const _TopSocialLinks({this.compact = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final iconSize = compact ? 14.0 : 15.0;
+    final buttonSize = compact ? 32.0 : 34.0;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _SocialNavIcon(
+          icon: FontAwesomeIcons.linkedinIn,
+          url: AppConstants.linkedInUrl,
+          tooltip: 'LinkedIn',
+          iconSize: iconSize,
+          size: buttonSize,
+        ),
+        const SizedBox(width: 8),
+        _SocialNavIcon(
+          icon: FontAwesomeIcons.whatsapp,
+          url: getWhatsAppUrl(),
+          tooltip: 'WhatsApp',
+          iconSize: iconSize,
+          size: buttonSize,
+        ),
+        const SizedBox(width: 8),
+        _SocialNavIcon(
+          icon: FontAwesomeIcons.github,
+          url: AppConstants.githubUrl,
+          tooltip: 'GitHub',
+          iconSize: iconSize,
+          size: buttonSize,
+        ),
+      ],
+    );
+  }
+}
+
+class _SocialNavIcon extends StatefulWidget {
+  final IconData icon;
+  final String url;
+  final String tooltip;
+  final double iconSize;
+  final double size;
+
+  const _SocialNavIcon({
+    required this.icon,
+    required this.url,
+    required this.tooltip,
+    required this.iconSize,
+    required this.size,
+  });
+
+  @override
+  State<_SocialNavIcon> createState() => _SocialNavIconState();
+}
+
+class _SocialNavIconState extends State<_SocialNavIcon> {
+  bool _isHovered = false;
+
+  Future<void> _openLink() async {
+    final uri = Uri.tryParse(widget.url);
+    if (uri == null) return;
+    await launchUrl(uri, mode: LaunchMode.platformDefault);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: widget.tooltip,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: GestureDetector(
+          onTap: _openLink,
+          child: AnimatedContainer(
+            duration: AppConstants.shortAnimation,
+            width: widget.size,
+            height: widget.size,
+            decoration: BoxDecoration(
+              color: _isHovered
+                  ? AppTheme.primaryBlue.withValues(alpha: 0.16)
+                  : AppTheme.surfaceColor.withValues(alpha: 0.45),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: _isHovered
+                    ? AppTheme.primaryBlue.withValues(alpha: 0.75)
+                    : AppTheme.inputBorder,
+              ),
+            ),
+            child: Center(
+              child: FaIcon(
+                widget.icon,
+                size: widget.iconSize,
+                color: _isHovered ? AppTheme.primaryBlue : AppTheme.textPrimary,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

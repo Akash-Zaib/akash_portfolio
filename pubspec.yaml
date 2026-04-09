@@ -43,4 +43,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/images/lookbook/
+    - assets/images/lookbook/images/
+    - assets/images/isoar/
     - assets/documents/

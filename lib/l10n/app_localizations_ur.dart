@@ -36,6 +36,35 @@ class AppLocalizationsUr extends AppLocalizations {
   String get heroRole => 'موبائل ایپ ڈویلپر (فلٹر)';
 
   @override
+  String get heroTitleSenior => 'سینئر سافٹ ویئر انجینئر';
+
+  @override
+  String get heroSubtitleMobile =>
+      'سینئر موبائل ایپ ڈویلپر — Flutter، React Native، اور ہائبرڈ کراس پلیٹ فارم ایپس (Android، iOS، Web، Desktop) میں مہارت۔';
+
+  @override
+  String get heroMiniBio =>
+      'میں مضبوز فلٹر ایپس بناتا ہوں — قابل توسیع آرکیٹیکچر، ہموار UX، اور تصور سے پروڈکشن تک قابل اعتماد کارکردگی۔';
+
+  @override
+  String get platformFlutter => 'Flutter';
+
+  @override
+  String get platformReactNative => 'React Native';
+
+  @override
+  String get platformAndroid => 'Android';
+
+  @override
+  String get platformIos => 'iOS';
+
+  @override
+  String get platformWeb => 'Web';
+
+  @override
+  String get platformDesktop => 'ڈیسک ٹاپ';
+
+  @override
   String get heroTagFlutter => 'Flutter';
 
   @override

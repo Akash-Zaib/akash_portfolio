@@ -331,78 +331,61 @@ class _ProjectCardState extends State<_ProjectCard> {
   }
 
   Widget _buildHeader(Color projectColor) {
+    final headerHeight = widget.isMobile ? 160.0 : 180.0;
+
     return ClipRRect(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(AppConstants.radiusXL - 1),
       ),
-      child: Stack(
-        children: [
-          // Background gradient
-          Container(
-            height: widget.isMobile ? 160 : 180,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  projectColor.withValues(alpha: 0.2),
-                  projectColor.withValues(alpha: 0.05),
-                  AppTheme.cardBackground,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-          
-          // Grid overlay
-          Positioned.fill(
-            child: CustomPaint(
-              painter: _SubtleGridPainter(color: projectColor),
-            ),
-          ),
-          
-          // Icon
-          Positioned.fill(
-            child: Center(
-              child: AnimatedContainer(
-                duration: AppTheme.quickAnimation,
-                padding: EdgeInsets.all(widget.isMobile ? 18 : 22),
-                decoration: BoxDecoration(
-                  color: _isHovered
-                      ? projectColor.withValues(alpha: 0.25)
-                      : AppTheme.surfaceColor.withValues(alpha: 0.6),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: _isHovered 
-                        ? projectColor.withValues(alpha: 0.4)
-                        : AppTheme.inputBorder.withValues(alpha: 0.5),
-                  ),
-                  boxShadow: _isHovered ? [
-                    BoxShadow(
-                      color: projectColor.withValues(alpha: 0.3),
-                      blurRadius: 20,
-                      spreadRadius: 0,
+      child: SizedBox(
+        height: headerHeight,
+        width: double.infinity,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Project thumbnail (imagePath was previously unused; cards showed icon only)
+            Image.asset(
+              _resolveAssetPath(widget.project.imagePath),
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+              errorBuilder: (context, error, stackTrace) {
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            projectColor.withValues(alpha: 0.2),
+                            projectColor.withValues(alpha: 0.05),
+                            AppTheme.cardBackground,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
                     ),
-                  ] : null,
-                ),
-                child: Icon(
-                  widget.project.icon,
-                  color: _isHovered ? Colors.white : projectColor,
-                  size: widget.isMobile ? 36 : 42,
-                ),
-              ),
+                    Center(
+                      child: Icon(
+                        widget.project.icon,
+                        color: projectColor.withValues(alpha: 0.5),
+                        size: widget.isMobile ? 48 : 56,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
-          ),
-          
-          // Hover overlay
-          if (_isHovered)
+
+            // Readability tint over photo
             Positioned.fill(
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      projectColor.withValues(alpha: 0.1),
+                      Colors.black.withValues(alpha: 0.12),
                       Colors.transparent,
+                      AppTheme.cardBackground.withValues(alpha: 0.3),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -410,7 +393,67 @@ class _ProjectCardState extends State<_ProjectCard> {
                 ),
               ),
             ),
-        ],
+
+            // Grid overlay
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _SubtleGridPainter(color: projectColor),
+              ),
+            ),
+
+            // Accent badge (small so the screenshot stays visible)
+            Positioned(
+              right: 12,
+              bottom: 12,
+              child: AnimatedContainer(
+                duration: AppTheme.quickAnimation,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: _isHovered
+                      ? projectColor.withValues(alpha: 0.35)
+                      : AppTheme.surfaceColor.withValues(alpha: 0.75),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: _isHovered
+                        ? projectColor.withValues(alpha: 0.5)
+                        : AppTheme.inputBorder.withValues(alpha: 0.5),
+                  ),
+                  boxShadow: _isHovered
+                      ? [
+                          BoxShadow(
+                            color: projectColor.withValues(alpha: 0.25),
+                            blurRadius: 12,
+                            spreadRadius: 0,
+                          ),
+                        ]
+                      : null,
+                ),
+                child: Icon(
+                  widget.project.icon,
+                  color: _isHovered ? Colors.white : projectColor,
+                  size: 22,
+                ),
+              ),
+            ),
+
+            // Hover overlay
+            if (_isHovered)
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        projectColor.withValues(alpha: 0.1),
+                        Colors.transparent,
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -460,6 +503,17 @@ class _ProjectCardState extends State<_ProjectCard> {
         ],
       ),
     );
+  }
+
+  String _resolveAssetPath(String path) {
+    final normalized = path.replaceAll('\\', '/').trim();
+    if (normalized.startsWith('assets/assets/')) {
+      return normalized.replaceFirst('assets/assets/', 'assets/');
+    }
+    if (normalized.startsWith('assets/')) {
+      return normalized;
+    }
+    return 'assets/$normalized';
   }
 }
 

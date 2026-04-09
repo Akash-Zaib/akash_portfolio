@@ -36,6 +36,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get heroRole => 'Mobile App Developer (Flutter)';
 
   @override
+  String get heroTitleSenior => 'Senior Software Engineer';
+
+  @override
+  String get heroSubtitleMobile =>
+      'Senior Mobile App Developer specializing in Flutter, React Native, and hybrid cross-platform apps for Android, iOS, Web, and Desktop.';
+
+  @override
+  String get heroMiniBio =>
+      'I build polished Flutter apps with scalable architecture, smooth UX, and reliable performance from concept to production.';
+
+  @override
+  String get platformFlutter => 'Flutter';
+
+  @override
+  String get platformReactNative => 'React Native';
+
+  @override
+  String get platformAndroid => 'Android';
+
+  @override
+  String get platformIos => 'iOS';
+
+  @override
+  String get platformWeb => 'Web';
+
+  @override
+  String get platformDesktop => 'Desktop';
+
+  @override
   String get heroTagFlutter => 'Flutter';
 
   @override

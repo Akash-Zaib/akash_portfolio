@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../l10n/app_localizations.dart';
 import '../config/theme.dart';
 import '../config/constants.dart';
@@ -81,7 +82,12 @@ class _HeroSectionState extends State<HeroSection>
             child: Padding(
               padding: ResponsiveBuilder.getHorizontalPadding(context),
               child: isMobile || isTablet
-                  ? _buildMobileLayout(l10n, isMobile, heroHeight)
+                  ? _buildMobileLayout(
+                      context,
+                      l10n,
+                      isMobile,
+                      heroHeight,
+                    )
                   : _buildDesktopLayout(l10n, heroHeight),
             ),
           ),
@@ -145,16 +151,13 @@ class _HeroSectionState extends State<HeroSection>
               
               const SizedBox(height: 12),
               
-              // Role with typewriter effect
+              // Senior title lines (typewriter on subtitle)
               _buildAnimatedElement(
                 delay: 0.35,
-                child: TypewriterText(
-                  text: l10n.heroRole,
-                  style: AppTheme.titleLarge.copyWith(
-                    color: AppTheme.textSecondary,
-                    fontSize: 24,
-                  ),
-                  startDelay: const Duration(milliseconds: 800),
+                child: _buildHeroHeadlines(
+                  l10n,
+                  useTypewriterForSubtitle: true,
+                  isMobile: false,
                 ),
               ),
               
@@ -197,6 +200,20 @@ class _HeroSectionState extends State<HeroSection>
                 ),
               ),
               
+              const SizedBox(height: 20),
+
+              _buildAnimatedElement(
+                delay: 0.72,
+                child: _buildMiniBio(l10n, isMobile: false),
+              ),
+
+              const SizedBox(height: 20),
+
+              _buildAnimatedElement(
+                delay: 0.78,
+                child: _buildPlatformIconRow(context, l10n, isMobile: false),
+              ),
+              
               const Spacer(flex: 3),
               
               // Scroll indicator
@@ -208,118 +225,144 @@ class _HeroSectionState extends State<HeroSection>
     );
   }
 
-  Widget _buildMobileLayout(AppLocalizations l10n, bool isMobile, double heroHeight) {
+  Widget _buildMobileLayout(
+    BuildContext context,
+    AppLocalizations l10n,
+    bool isMobile,
+    double heroHeight,
+  ) {
     final photoSize = isMobile ? 160.0 : 200.0;
-    
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(height: heroHeight * 0.05),
-        
-        // Profile Photo
-        _buildAnimatedElement(
-          delay: 0.0,
-          child: ProfilePhotoWidget(
-            imagePath: null, // Add your photo: 'assets/images/your_photo.png'
-            size: photoSize,
-            showGlow: true,
-          ),
-        ),
-        
-        SizedBox(height: isMobile ? 24 : 32),
-        
-        // Greeting
-        _buildAnimatedElement(
-          delay: 0.15,
-          child: Text(
-            l10n.heroGreeting,
-            style: AppTheme.labelLarge.copyWith(
-              color: AppTheme.primaryBlue,
-              letterSpacing: 2,
-              fontSize: isMobile ? 12 : 14,
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: heroHeight * 0.04),
+
+                // Profile Photo
+                _buildAnimatedElement(
+                  delay: 0.0,
+                  child: ProfilePhotoWidget(
+                    imagePath: null, // Add your photo: 'assets/images/your_photo.png'
+                    size: photoSize,
+                    showGlow: true,
+                  ),
+                ),
+
+                SizedBox(height: isMobile ? 20 : 28),
+
+                // Greeting
+                _buildAnimatedElement(
+                  delay: 0.15,
+                  child: Text(
+                    l10n.heroGreeting,
+                    style: AppTheme.labelLarge.copyWith(
+                      color: AppTheme.primaryBlue,
+                      letterSpacing: 2,
+                      fontSize: isMobile ? 12 : 14,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                // Name with gradient
+                _buildAnimatedElement(
+                  delay: 0.25,
+                  child: GradientText(
+                    text: l10n.heroName,
+                    style: isMobile
+                        ? AppTheme.displayMedium.copyWith(fontSize: 32)
+                        : AppTheme.displayMedium.copyWith(fontSize: 42),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                SizedBox(height: isMobile ? 8 : 12),
+
+                // Senior title lines
+                _buildAnimatedElement(
+                  delay: 0.35,
+                  child: _buildHeroHeadlines(
+                    l10n,
+                    useTypewriterForSubtitle: false,
+                    isMobile: isMobile,
+                  ),
+                ),
+
+                SizedBox(height: isMobile ? 16 : 24),
+
+                // Skill Tags
+                _buildAnimatedElement(
+                  delay: 0.45,
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: isMobile ? 8 : 10,
+                    runSpacing: isMobile ? 8 : 10,
+                    children: [
+                      _SkillTag(label: l10n.heroTagFlutter, isMobile: isMobile),
+                      _SkillTag(label: l10n.heroTagDart, isMobile: isMobile),
+                      _SkillTag(label: l10n.heroTagFirebase, isMobile: isMobile),
+                      _SkillTag(label: l10n.heroTagUIUX, isMobile: isMobile),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: isMobile ? 22 : 30),
+
+                // CTA Buttons
+                _buildAnimatedElement(
+                  delay: 0.55,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _CTAButton(
+                        label: l10n.heroCTAContact,
+                        isPrimary: true,
+                        onTap: widget.onContactTap,
+                        isMobile: isMobile,
+                      ),
+                      SizedBox(width: isMobile ? 12 : 16),
+                      _CTAButton(
+                        label: l10n.heroCTAProjects,
+                        isPrimary: false,
+                        onTap: widget.onProjectsTap,
+                        isMobile: isMobile,
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: isMobile ? 14 : 18),
+
+                _buildAnimatedElement(
+                  delay: 0.63,
+                  child: _buildMiniBio(l10n, isMobile: isMobile),
+                ),
+
+                SizedBox(height: isMobile ? 12 : 16),
+
+                _buildAnimatedElement(
+                  delay: 0.68,
+                  child: _buildPlatformIconRow(context, l10n, isMobile: isMobile),
+                ),
+
+                SizedBox(height: isMobile ? 14 : 20),
+
+                // Scroll indicator (fixed gap — Spacer breaks inside scroll)
+                _buildScrollIndicator(l10n, isMobile),
+
+                SizedBox(height: isMobile ? 12 : 20),
+              ],
             ),
           ),
-        ),
-        
-        const SizedBox(height: 8),
-        
-        // Name with gradient
-        _buildAnimatedElement(
-          delay: 0.25,
-          child: GradientText(
-            text: l10n.heroName,
-            style: isMobile
-                ? AppTheme.displayMedium.copyWith(fontSize: 32)
-                : AppTheme.displayMedium.copyWith(fontSize: 42),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        
-        SizedBox(height: isMobile ? 8 : 12),
-        
-        // Role subtitle
-        _buildAnimatedElement(
-          delay: 0.35,
-          child: Text(
-            l10n.heroRole,
-            style: AppTheme.titleMedium.copyWith(
-              color: AppTheme.textSecondary,
-              fontSize: isMobile ? 14 : 18,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        
-        SizedBox(height: isMobile ? 20 : 28),
-        
-        // Skill Tags
-        _buildAnimatedElement(
-          delay: 0.45,
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            spacing: isMobile ? 8 : 10,
-            runSpacing: isMobile ? 8 : 10,
-            children: [
-              _SkillTag(label: l10n.heroTagFlutter, isMobile: isMobile),
-              _SkillTag(label: l10n.heroTagDart, isMobile: isMobile),
-              _SkillTag(label: l10n.heroTagFirebase, isMobile: isMobile),
-              _SkillTag(label: l10n.heroTagUIUX, isMobile: isMobile),
-            ],
-          ),
-        ),
-        
-        SizedBox(height: isMobile ? 28 : 36),
-        
-        // CTA Buttons
-        _buildAnimatedElement(
-          delay: 0.55,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _CTAButton(
-                label: l10n.heroCTAContact,
-                isPrimary: true,
-                onTap: widget.onContactTap,
-                isMobile: isMobile,
-              ),
-              SizedBox(width: isMobile ? 12 : 16),
-              _CTAButton(
-                label: l10n.heroCTAProjects,
-                isPrimary: false,
-                onTap: widget.onProjectsTap,
-                isMobile: isMobile,
-              ),
-            ],
-          ),
-        ),
-        
-        const Spacer(),
-        
-        // Scroll indicator
-        _buildScrollIndicator(l10n, isMobile),
-        
-        SizedBox(height: isMobile ? 20 : 32),
-      ],
+        );
+      },
     );
   }
 
@@ -391,6 +434,140 @@ class _HeroSectionState extends State<HeroSection>
           );
         },
       ),
+    );
+  }
+
+  Widget _buildMiniBio(AppLocalizations l10n, {required bool isMobile}) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: isMobile ? 340 : 620,
+      ),
+      child: Text(
+        l10n.heroMiniBio,
+        style: AppTheme.bodyLarge.copyWith(
+          color: AppTheme.textSecondary,
+          fontSize: isMobile ? 13 : 15,
+          height: 1.6,
+        ),
+        textAlign: isMobile ? TextAlign.center : TextAlign.left,
+      ),
+    );
+  }
+
+  /// Two-line hero positioning: senior engineer + mobile / hybrid specialization.
+  Widget _buildHeroHeadlines(
+    AppLocalizations l10n, {
+    required bool useTypewriterForSubtitle,
+    required bool isMobile,
+  }) {
+    final seniorStyle = (isMobile
+            ? AppTheme.titleMedium
+            : AppTheme.titleLarge)
+        .copyWith(
+      color: AppTheme.textPrimary,
+      fontWeight: FontWeight.w600,
+      fontSize: isMobile ? 15 : 22,
+      height: 1.25,
+    );
+
+    final subtitleStyle = AppTheme.titleMedium.copyWith(
+      color: AppTheme.textSecondary,
+      fontSize: isMobile ? 13 : 18,
+      height: isMobile ? 1.45 : 1.35,
+    );
+
+    final content = Column(
+      crossAxisAlignment:
+          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          l10n.heroTitleSenior,
+          style: seniorStyle,
+          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+        ),
+        SizedBox(height: isMobile ? 6 : 10),
+        if (useTypewriterForSubtitle && !isMobile)
+          TypewriterText(
+            text: l10n.heroSubtitleMobile,
+            style: subtitleStyle.copyWith(fontSize: 20),
+            charDuration: const Duration(milliseconds: 28),
+            startDelay: const Duration(milliseconds: 400),
+          )
+        else
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isMobile ? 360 : 640),
+            child: Text(
+              l10n.heroSubtitleMobile,
+              style: subtitleStyle,
+              textAlign: isMobile ? TextAlign.center : TextAlign.start,
+            ),
+          ),
+      ],
+    );
+
+    return content;
+  }
+
+  /// Platform / stack icons (Flutter, RN, Android, iOS, Web, Desktop).
+  Widget _buildPlatformIconRow(
+    BuildContext context,
+    AppLocalizations l10n, {
+    required bool isMobile,
+  }) {
+    final useWrapLayout =
+        isMobile || ResponsiveBuilder.isTablet(context);
+    final iconSize = isMobile ? 20.0 : 22.0;
+    final gap = isMobile ? 10.0 : 12.0;
+
+    final entries = <(IconData, String)>[
+      (FontAwesomeIcons.flutter, l10n.platformFlutter),
+      (FontAwesomeIcons.react, l10n.platformReactNative),
+      (FontAwesomeIcons.android, l10n.platformAndroid),
+      (FontAwesomeIcons.apple, l10n.platformIos),
+      (FontAwesomeIcons.chrome, l10n.platformWeb),
+      (FontAwesomeIcons.desktop, l10n.platformDesktop),
+    ];
+
+    Widget chip(IconData icon, String tooltip) {
+      return Tooltip(
+        message: tooltip,
+        child: Container(
+          padding: EdgeInsets.all(isMobile ? 8 : 10),
+          decoration: BoxDecoration(
+            color: AppTheme.surfaceColor.withValues(alpha: 0.45),
+            borderRadius: BorderRadius.circular(AppConstants.radiusMD),
+            border: Border.all(
+              color: AppTheme.inputBorder.withValues(alpha: 0.5),
+            ),
+          ),
+          child: FaIcon(
+            icon,
+            size: iconSize,
+            color: AppTheme.textSecondary,
+          ),
+        ),
+      );
+    }
+
+    if (useWrapLayout) {
+      return Wrap(
+        alignment: WrapAlignment.center,
+        spacing: gap,
+        runSpacing: gap,
+        children: [
+          for (final e in entries) chip(e.$1, e.$2),
+        ],
+      );
+    }
+
+    return Row(
+      children: [
+        for (int i = 0; i < entries.length; i++) ...[
+          if (i > 0) SizedBox(width: gap),
+          chip(entries[i].$1, entries[i].$2),
+        ],
+      ],
     );
   }
 }
@@ -534,3 +711,4 @@ class _CTAButtonState extends State<_CTAButton> {
     );
   }
 }
+

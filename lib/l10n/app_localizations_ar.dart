@@ -36,6 +36,35 @@ class AppLocalizationsAr extends AppLocalizations {
   String get heroRole => 'مطور تطبيقات الجوال (Flutter)';
 
   @override
+  String get heroTitleSenior => 'مهندس برمجيات أول';
+
+  @override
+  String get heroSubtitleMobile =>
+      'مطور تطبيقات جوال أول متخصص في Flutter وReact Native وتطبيقات هجينة متعددة المنصات لأندرويد وiOS والويب وسطح المكتب.';
+
+  @override
+  String get heroMiniBio =>
+      'أبني تطبيقات Flutter احترافية بهندسة قابلة للتوسع وتجربة مستخدم سلسة وأداء موثوق من الفكرة إلى الإنتاج.';
+
+  @override
+  String get platformFlutter => 'Flutter';
+
+  @override
+  String get platformReactNative => 'React Native';
+
+  @override
+  String get platformAndroid => 'أندرويد';
+
+  @override
+  String get platformIos => 'iOS';
+
+  @override
+  String get platformWeb => 'الويب';
+
+  @override
+  String get platformDesktop => 'سطح المكتب';
+
+  @override
   String get heroTagFlutter => 'Flutter';
 
   @override
