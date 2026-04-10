@@ -190,7 +190,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get expTerabitCompany => 'Terabit IT';
 
   @override
-  String get expTerabitPeriod => 'Janvier 2024 - Mars 2025';
+  String get expTerabitPeriod => 'Janvier 2023 - Mars 2025';
 
   @override
   String get expTerabitDescription =>
@@ -212,7 +212,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Créé des composants UI réutilisables et modulaires';
 
   @override
-  String get expVohTitle => 'Stagiaire Développeur Flutter';
+  String get expVohTitle => 'Développeur Flutter Junior';
 
   @override
   String get expVohCompany => 'Voh Technologies';

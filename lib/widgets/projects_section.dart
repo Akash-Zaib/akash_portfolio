@@ -136,33 +136,44 @@ class _ProjectsSectionState extends State<ProjectsSection>
       builder: (context, constraints) {
         final availableWidth = constraints.maxWidth;
         final totalSpacing = spacing * (crossAxisCount - 1);
-        
-        // Cards expand to fill available space evenly
+
         final cardWidth = (availableWidth - totalSpacing) / crossAxisCount;
-        
-        return Wrap(
-          spacing: spacing,
-          runSpacing: spacing,
-          alignment: WrapAlignment.start, // Align to start for better layout
-          children: portfolioProjects.asMap().entries.map((entry) {
-            final index = entry.key;
-            final project = entry.value;
+
+        // Same pixel height for every card in the grid; scales slightly with text size.
+        final double baseCardHeight = isMobile
+            ? 480
+            : (crossAxisCount <= 2 ? 500 : 520);
+        final textFactor = MediaQuery.textScalerOf(context).scale(1.0);
+        final cardTargetHeight =
+            baseCardHeight * textFactor.clamp(0.85, 1.35);
+
+        final childAspectRatio = cardWidth / cardTargetHeight;
+
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: spacing,
+            mainAxisSpacing: spacing,
+            childAspectRatio: childAspectRatio,
+          ),
+          itemCount: portfolioProjects.length,
+          itemBuilder: (context, index) {
+            final project = portfolioProjects[index];
             return AnimatedEntrance(
               delay: Duration(milliseconds: 100 + (index * 60)),
-              child: SizedBox(
-                key: ValueKey(project.id),
-                width: isMobile ? availableWidth : cardWidth,
-                child: _ProjectCard(
-                  key: ValueKey('card_${project.id}'),
-                  project: project,
-                  l10n: l10n,
-                  isMobile: isMobile,
-                  animationController: _entranceController,
-                  index: index,
-                ),
+              child: _ProjectCard(
+                key: ValueKey('card_${project.id}'),
+                project: project,
+                l10n: l10n,
+                isMobile: isMobile,
+                animationController: _entranceController,
+                index: index,
               ),
             );
-          }).toList(),
+          },
         );
       },
     );
@@ -237,9 +248,10 @@ class _ProjectCardState extends State<_ProjectCard> {
         onTapCancel: () => setState(() => _isPressed = false),
         child: AnimatedContainer(
           duration: AppTheme.quickAnimation,
-          transform: Matrix4.identity()..scale(scale),
+          transform: Matrix4.diagonal3Values(scale, scale, 1.0),
           transformAlignment: Alignment.center,
           child: Container(
+            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               color: AppTheme.cardBackground,
               borderRadius: BorderRadius.circular(AppConstants.radiusXL),
@@ -267,60 +279,56 @@ class _ProjectCardState extends State<_ProjectCard> {
                     ],
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Project Image/Icon Header
                 _buildHeader(projectColor),
-                
-                // Project Info
-                Padding(
-                  padding: EdgeInsets.all(widget.isMobile ? 16 : 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Title
-                      Text(
-                        widget.project.title,
-                        style: AppTheme.titleLarge.copyWith(
-                          fontSize: widget.isMobile ? 17 : 19,
-                          fontWeight: FontWeight.w600,
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(widget.isMobile ? 16 : 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.project.title,
+                          style: AppTheme.titleLarge.copyWith(
+                            fontSize: widget.isMobile ? 17 : 19,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      
-                      SizedBox(height: widget.isMobile ? 8 : 10),
-                      
-                      // Description
-                      Text(
-                        widget.project.description,
-                        style: AppTheme.bodyMedium.copyWith(
-                          fontSize: widget.isMobile ? 13 : 14,
-                          height: 1.5,
-                          color: AppTheme.textSecondary,
+                        SizedBox(height: widget.isMobile ? 8 : 10),
+                        Text(
+                          widget.project.description,
+                          style: AppTheme.bodyMedium.copyWith(
+                            fontSize: widget.isMobile ? 13 : 14,
+                            height: 1.5,
+                            color: AppTheme.textSecondary,
+                          ),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      
-                      SizedBox(height: widget.isMobile ? 14 : 18),
-                      
-                      // Tech Stack
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: widget.project.techStack.take(4).map((tech) {
-                          return _TechTag(label: tech, color: projectColor);
-                        }).toList(),
-                      ),
-                      
-                      SizedBox(height: widget.isMobile ? 14 : 18),
-                      
-                      // View Project CTA
-                      _buildCTA(projectColor),
-                    ],
+                        SizedBox(height: widget.isMobile ? 14 : 18),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            primary: false,
+                            physics: const ClampingScrollPhysics(),
+                            child: Wrap(
+                              spacing: 6,
+                              runSpacing: 6,
+                              children: widget.project.techStack.map((tech) {
+                                return _TechTag(
+                                  label: tech,
+                                  color: projectColor,
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: widget.isMobile ? 14 : 18),
+                        _buildCTA(projectColor),
+                      ],
+                    ),
                   ),
                 ),
               ],

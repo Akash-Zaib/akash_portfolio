@@ -445,7 +445,7 @@ abstract class AppLocalizations {
   /// No description provided for @expTerabitPeriod.
   ///
   /// In en, this message translates to:
-  /// **'January 2024 - March 2025'**
+  /// **'January 2023 - March 2025'**
   String get expTerabitPeriod;
 
   /// No description provided for @expTerabitDescription.
@@ -481,7 +481,7 @@ abstract class AppLocalizations {
   /// No description provided for @expVohTitle.
   ///
   /// In en, this message translates to:
-  /// **'Flutter Developer Intern'**
+  /// **'Junior Flutter Developer'**
   String get expVohTitle;
 
   /// No description provided for @expVohCompany.

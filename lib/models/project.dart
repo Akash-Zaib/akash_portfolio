@@ -188,6 +188,8 @@ Applied Flutter best practices for widget composition, layout optimization, and 
       'Flutter',
       'Dart',
       'GetX',
+      "Animations",
+      "Custom Packages",
       'Clean Architecture',
       'Responsive UI',
     ],
@@ -421,7 +423,7 @@ To improve financial understanding, the application includes charts, summaries, 
   // PROJECT 5: FoodieHub - Restaurant App
   // ─────────────────────────────────────────────────────────
   Project(
-    id: 'binance',
+    id: 'bienas',
     title: 'Binance - Distribution Management App',
 
     // 📱 CARD (Main Screen)
@@ -463,8 +465,8 @@ The complete product experience helps improve distribution efficiency, simplifie
       'REST APIs',
       'API Integration',
       'Backend Services',
-      'Role-Based Architecture',
-      'State Management',
+      // 'Role-Based Architecture',
+      // 'State Management',
     ],
 
     features: [
@@ -517,30 +519,82 @@ The complete product experience helps improve distribution efficiency, simplifie
   // PROJECT 9: EduLearn - E-Learning Platform
   // ─────────────────────────────────────────────────────────
   Project(
-    id: 'edulearn',
-    title: 'EduLearn - Online Courses',
+    id: 'docmind',
+    title: 'DocMind - AI Document Processing',
+
+    // 📱 CARD (Main Screen)
     shortDescription:
-        'E-learning platform with video courses and certificates.',
+        'AI-powered document processing app for extracting, organizing, and managing structured data from invoices, receipts, and forms.',
+
+    // 📄 DETAIL PAGE
     fullDescription:
-        '''A feature-rich e-learning platform offering video courses, interactive quizzes, progress tracking, and certificate generation. Supports multiple languages and offline viewing for learning anywhere.
+        '''Developed an AI-powered document processing mobile application designed to simplify the handling of invoices, receipts, forms, and other business documents. The app enables users to upload, scan, and process documents efficiently while converting unstructured content into structured, searchable digital records.
 
-  Built with scalability in mind using BLoC pattern, the app handles thousands of concurrent users while maintaining smooth video playback and instant quiz feedback.''',
+The application supports intelligent document scanning and OCR-based text extraction, allowing users to capture important information directly from physical or digital files. AI-driven processing is used to identify key fields such as names, dates, invoice numbers, totals, and category-specific data, reducing manual entry and improving operational efficiency.
 
-    role: 'Mobile Developer',
+Built with a clean and scalable Flutter architecture, the app provides a smooth document workflow from upload to extraction, review, categorization, and storage. Users can browse processed documents, search records quickly, review extracted fields, and manage document history through an organized and intuitive interface.
 
-    imagePath: 'assets/images/edulearn.png',
-    heroImage: 'assets/images/project_edulearn_hero.png',
-    galleryImages: [],
-    techStack: ['Flutter', 'BLoC', 'AWS', 'Video Player', 'SQLite'],
-    features: [
-      'Video course streaming',
-      'Interactive quizzes',
-      'Progress tracking',
-      'Certificates generation',
-      'Offline downloads',
+The system was designed with a strong focus on usability, structured data handling, and modern mobile UI practices. It is suitable for businesses and teams that need faster document digitization, improved record management, and more reliable processing workflows.''',
+
+    role: 'Flutter Developer',
+    client: 'Enterprise / Business Automation',
+
+    imagePath: 'assets/images/docmind.png',
+    heroImage: 'assets/images/project_docmind_hero.png',
+    galleryImages: [
+      'assets/images/project_docmind_1.png',
+      'assets/images/project_docmind_2.png',
+      'assets/images/project_docmind_3.png',
     ],
+
+    techStack: [
+      'Flutter',
+      'Dart',
+      'MobX',
+      'REST APIs',
+      'MongoDB',
+      'OCR Integration',
+      'AI API',
+      'Cloud Storage',
+    ],
+
+    features: [
+      'Document scanning and upload workflow',
+      'OCR-based text extraction',
+      'AI-powered field detection and processing',
+      'Structured data extraction from invoices and forms',
+      'Searchable document history',
+      'Document categorization and organization',
+      'Review and verification of extracted data',
+      'Responsive and clean mobile UI',
+    ],
+
+    responsibilities: [
+      'Developed complete mobile UI using Flutter',
+      'Built document upload and scanning workflows',
+      'Integrated OCR and AI-based extraction features',
+      'Implemented structured document review screens',
+      'Created searchable history and document listing modules',
+      'Connected app screens with backend APIs for processing workflows',
+      'Applied MobX for reactive state management',
+      'Maintained reusable UI components and scalable app structure',
+    ],
+
+    challenges: [
+      'Designing a clean workflow for complex document processing tasks',
+      'Presenting extracted data clearly for user review and verification',
+      'Handling different document formats in a structured way',
+      'Maintaining smooth UI performance during document-heavy operations',
+    ],
+
+    results: [
+      'Delivered a professional AI-based document processing solution',
+      'Improved efficiency in document digitization and structured data handling',
+      'Created a scalable workflow for business document management',
+    ],
+
     accentColor: AppTheme.primaryBlue,
-    icon: Icons.menu_book_rounded,
+    icon: Icons.description_rounded,
   ),
 
   // ─────────────────────────────────────────────────────────

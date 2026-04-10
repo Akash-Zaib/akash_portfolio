@@ -189,7 +189,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get expTerabitCompany => 'Terabit IT';
 
   @override
-  String get expTerabitPeriod => 'جنوری 2024 - مارچ 2025';
+  String get expTerabitPeriod => 'جنوری 2023 - مارچ 2025';
 
   @override
   String get expTerabitDescription =>
@@ -211,7 +211,7 @@ class AppLocalizationsUr extends AppLocalizations {
       'دوبارہ قابل استعمال اور ماڈیولر UI اجزاء بنائے';
 
   @override
-  String get expVohTitle => 'فلٹر ڈویلپر انٹرن';
+  String get expVohTitle => 'جونیئر فلٹر ڈویلپر';
 
   @override
   String get expVohCompany => 'Voh Technologies';

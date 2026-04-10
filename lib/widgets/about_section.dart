@@ -19,9 +19,7 @@ class AboutSection extends StatelessWidget {
     return RepaintBoundary(
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(
-          vertical: isMobile ? 48 : 80,
-        ),
+        padding: EdgeInsets.symmetric(vertical: isMobile ? 48 : 80),
         child: ContentContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,16 +41,18 @@ class AboutSection extends StatelessWidget {
                       SizedBox(height: isMobile ? 8 : 12),
                       GradientText(
                         text: l10n.aboutTitle,
-                        style: isMobile ? AppTheme.headlineMedium : AppTheme.headlineLarge,
+                        style: isMobile
+                            ? AppTheme.headlineMedium
+                            : AppTheme.headlineLarge,
                         textAlign: TextAlign.center,
                       ),
                     ],
                   ),
                 ),
               ),
-              
+
               SizedBox(height: isMobile ? 28 : 48),
-              
+
               // About Content
               if (isMobile)
                 _buildMobileLayout(context, l10n)
@@ -74,29 +74,27 @@ class AboutSection extends StatelessWidget {
           delay: const Duration(milliseconds: 100),
           child: Text(
             l10n.aboutDescription,
-            style: AppTheme.bodyLarge.copyWith(
-              height: 1.7,
-              fontSize: 14,
-            ),
+            style: AppTheme.bodyLarge.copyWith(height: 1.7, fontSize: 14),
             textAlign: TextAlign.center,
           ),
         ),
-        
+
         const SizedBox(height: 24),
-        
+
         // Info Cards
         AnimatedEntrance(
           delay: const Duration(milliseconds: 200),
           child: _InfoCard(
             icon: FontAwesomeIcons.graduationCap,
             title: l10n.aboutEducation,
-            content: '${l10n.aboutEducationDegree}\n${l10n.aboutEducationUniversity}\n${l10n.aboutEducationCGPA}',
+            content:
+                '${l10n.aboutEducationDegree}\n${l10n.aboutEducationUniversity}\n${l10n.aboutEducationCGPA}',
             isMobile: true,
           ),
         ),
-        
+
         const SizedBox(height: 12),
-        
+
         AnimatedEntrance(
           delay: const Duration(milliseconds: 280),
           child: _InfoCard(
@@ -106,9 +104,9 @@ class AboutSection extends StatelessWidget {
             isMobile: true,
           ),
         ),
-        
+
         const SizedBox(height: 12),
-        
+
         AnimatedEntrance(
           delay: const Duration(milliseconds: 360),
           child: _InfoCard(
@@ -119,9 +117,9 @@ class AboutSection extends StatelessWidget {
             isMobile: true,
           ),
         ),
-        
+
         const SizedBox(height: 12),
-        
+
         AnimatedEntrance(
           delay: const Duration(milliseconds: 440),
           child: _InfoCard(
@@ -132,9 +130,9 @@ class AboutSection extends StatelessWidget {
             isMobile: true,
           ),
         ),
-        
+
         const SizedBox(height: 24),
-        
+
         // CV Download Button
         AnimatedEntrance(
           delay: const Duration(milliseconds: 520),
@@ -165,28 +163,26 @@ class AboutSection extends StatelessWidget {
                 delay: const Duration(milliseconds: 100),
                 child: Text(
                   l10n.aboutDescription,
-                  style: AppTheme.bodyLarge.copyWith(
-                    height: 1.8,
-                    fontSize: 16,
-                  ),
+                  style: AppTheme.bodyLarge.copyWith(height: 1.8, fontSize: 16),
                 ),
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Education Card
               AnimatedEntrance(
                 delay: const Duration(milliseconds: 200),
                 child: _InfoCard(
                   icon: FontAwesomeIcons.graduationCap,
                   title: l10n.aboutEducation,
-                  content: '${l10n.aboutEducationDegree}\n${l10n.aboutEducationUniversity}\n${l10n.aboutEducationCGPA}',
+                  content:
+                      '${l10n.aboutEducationDegree}\n${l10n.aboutEducationUniversity}\n${l10n.aboutEducationCGPA}',
                   isMobile: false,
                 ),
               ),
-              
+
               const SizedBox(height: 28),
-              
+
               AnimatedEntrance(
                 delay: const Duration(milliseconds: 300),
                 child: _DownloadCVButton(
@@ -199,9 +195,9 @@ class AboutSection extends StatelessWidget {
             ],
           ),
         ),
-        
+
         const SizedBox(width: 48),
-        
+
         // Right side - Contact Info
         Expanded(
           flex: 2,
@@ -216,9 +212,9 @@ class AboutSection extends StatelessWidget {
                   isMobile: false,
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               AnimatedEntrance(
                 delay: const Duration(milliseconds: 230),
                 child: _InfoCard(
@@ -229,9 +225,9 @@ class AboutSection extends StatelessWidget {
                   isMobile: false,
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               AnimatedEntrance(
                 delay: const Duration(milliseconds: 310),
                 child: _InfoCard(
@@ -438,7 +434,9 @@ class _DownloadCVButtonState extends State<_DownloadCVButton> {
           decoration: BoxDecoration(
             gradient: _isDisabled
                 ? null
-                : (_isHovered ? AppTheme.buttonGradient : AppTheme.primaryGradient),
+                : (_isHovered
+                      ? AppTheme.buttonGradient
+                      : AppTheme.primaryGradient),
             color: _isDisabled ? AppTheme.surfaceColor : null,
             borderRadius: BorderRadius.circular(AppConstants.radiusMD),
             boxShadow: _isHovered && !_isDisabled
@@ -486,7 +484,7 @@ class _DownloadCVButtonState extends State<_DownloadCVButton> {
 
   void _downloadCV() async {
     if (_downloadState != DownloadState.idle) return;
-    
+
     setState(() {
       _downloadState = DownloadState.downloading;
     });
@@ -502,7 +500,9 @@ class _DownloadCVButtonState extends State<_DownloadCVButton> {
 
     if (mounted) {
       setState(() {
-        _downloadState = success ? DownloadState.downloaded : DownloadState.idle;
+        _downloadState = success
+            ? DownloadState.downloaded
+            : DownloadState.idle;
       });
     }
   }

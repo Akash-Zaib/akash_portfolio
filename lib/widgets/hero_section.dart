@@ -106,7 +106,7 @@ class _HeroSectionState extends State<HeroSection>
             delay: 0.0,
             child: Center(
               child: ProfilePhotoWidget(
-                imagePath: null, // Add your photo: 'assets/images/your_photo.png'
+                imagePath: AppConstants.heroProfileImage,
                 size: 280,
                 showGlow: true,
               ),
@@ -248,7 +248,7 @@ class _HeroSectionState extends State<HeroSection>
                 _buildAnimatedElement(
                   delay: 0.0,
                   child: ProfilePhotoWidget(
-                    imagePath: null, // Add your photo: 'assets/images/your_photo.png'
+                    imagePath: AppConstants.heroProfileImage,
                     size: photoSize,
                     showGlow: true,
                   ),
