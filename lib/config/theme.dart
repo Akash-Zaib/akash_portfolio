@@ -231,6 +231,7 @@ class GradientText extends StatelessWidget {
         text,
         style: (style ?? AppTheme.displayLarge).copyWith(color: Colors.white),
         textAlign: textAlign,
+        softWrap: true,
       ),
     );
   }

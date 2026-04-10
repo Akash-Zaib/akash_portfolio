@@ -7,6 +7,7 @@ import '../screens/project_detail_screen.dart';
 import 'responsive_builder.dart';
 import 'animated_entrance.dart';
 import '../utils/asset_path.dart';
+import '../services/analytics_service.dart';
 
 class ProjectsSection extends StatefulWidget {
   const ProjectsSection({super.key});
@@ -145,7 +146,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
             : (crossAxisCount <= 2 ? 500 : 520);
         final textFactor = MediaQuery.textScalerOf(context).scale(1.0);
         final cardTargetHeight =
-            baseCardHeight * textFactor.clamp(0.85, 1.35);
+            baseCardHeight * textFactor.clamp(0.78, 1.48);
 
         final childAspectRatio = cardWidth / cardTargetHeight;
 
@@ -205,6 +206,7 @@ class _ProjectCardState extends State<_ProjectCard> {
   bool _isPressed = false;
 
   void _navigateToDetail() {
+    AnalyticsService.logProjectTap(widget.project.id);
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {

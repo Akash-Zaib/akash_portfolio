@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../config/theme.dart';
 import '../config/constants.dart';
 import '../services/download_service.dart';
+import '../services/analytics_service.dart';
 import 'responsive_builder.dart';
 import 'animated_entrance.dart';
 
@@ -246,6 +247,7 @@ class AboutSection extends StatelessWidget {
   }
 
   static Future<void> _launchEmail() async {
+    await AnalyticsService.logLinkOpen('email');
     final uri = Uri.parse('mailto:${AppConstants.email}');
     try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -258,6 +260,7 @@ class AboutSection extends StatelessWidget {
   }
 
   static Future<void> _launchPhone() async {
+    await AnalyticsService.logLinkOpen('phone');
     final uri = Uri.parse('tel:${AppConstants.phone}');
     try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -499,6 +502,9 @@ class _DownloadCVButtonState extends State<_DownloadCVButton> {
     );
 
     if (mounted) {
+      if (success) {
+        await AnalyticsService.logCvDownload();
+      }
       setState(() {
         _downloadState = success
             ? DownloadState.downloaded

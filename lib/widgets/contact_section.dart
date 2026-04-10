@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../config/theme.dart';
 import '../config/constants.dart';
 import '../services/email_service.dart';
+import '../services/analytics_service.dart';
 import 'responsive_builder.dart';
 import 'animated_entrance.dart';
 
@@ -58,6 +59,7 @@ class _ContactSectionState extends State<ContactSection> {
     });
 
     if (success) {
+      await AnalyticsService.logContactSubmitSuccess();
       _nameController.clear();
       _emailController.clear();
       _messageController.clear();
@@ -147,11 +149,15 @@ class _ContactSectionState extends State<ContactSection> {
                           size: 12,
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          AppConstants.location,
-                          style: AppTheme.bodyMedium.copyWith(
-                            color: AppTheme.textMuted,
-                            fontSize: isMobile ? 12 : 13,
+                        Flexible(
+                          child: Text(
+                            AppConstants.location,
+                            style: AppTheme.bodyMedium.copyWith(
+                              color: AppTheme.textMuted,
+                              fontSize: isMobile ? 12 : 13,
+                            ),
+                            textAlign: TextAlign.center,
+                            softWrap: true,
                           ),
                         ),
                       ],
@@ -460,6 +466,7 @@ class _ViewResumeButtonState extends State<_ViewResumeButton> {
   }
 
   void _openResume() async {
+    await AnalyticsService.logLinkOpen('online_cv');
     final uri = Uri.parse(AppConstants.cvPath);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -480,28 +487,29 @@ class _SocialLinks extends StatelessWidget {
         _SocialButton(
           icon: FontAwesomeIcons.github,
           color: AppTheme.textPrimary,
-          onTap: () => _launchUrl(AppConstants.githubUrl),
+          onTap: () => _launchUrl(AppConstants.githubUrl, 'github'),
           isMobile: isMobile,
         ),
         SizedBox(width: isMobile ? 12 : 16),
         _SocialButton(
           icon: FontAwesomeIcons.linkedin,
           color: const Color(0xFF0A66C2),
-          onTap: () => _launchUrl(AppConstants.linkedInUrl),
+          onTap: () => _launchUrl(AppConstants.linkedInUrl, 'linkedin'),
           isMobile: isMobile,
         ),
         SizedBox(width: isMobile ? 12 : 16),
         _SocialButton(
           icon: FontAwesomeIcons.whatsapp,
           color: const Color(0xFF25D366),
-          onTap: () => _launchUrl(getWhatsAppUrl()),
+          onTap: () => _launchUrl(getWhatsAppUrl(), 'whatsapp'),
           isMobile: isMobile,
         ),
       ],
     );
   }
 
-  Future<void> _launchUrl(String url) async {
+  Future<void> _launchUrl(String url, String linkType) async {
+    await AnalyticsService.logLinkOpen(linkType);
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);

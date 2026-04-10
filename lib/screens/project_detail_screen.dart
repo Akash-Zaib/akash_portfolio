@@ -6,6 +6,7 @@ import '../widgets/responsive_builder.dart';
 import '../widgets/animated_entrance.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/asset_path.dart';
+import '../services/analytics_service.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
   final Project project;
@@ -30,6 +31,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen>
   @override
   void initState() {
     super.initState();
+    AnalyticsService.logProjectDetailView(widget.project.id);
     _entranceController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,

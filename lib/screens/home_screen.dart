@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../config/theme.dart';
+import '../services/analytics_service.dart';
 import '../widgets/navigation_bar.dart';
 import '../widgets/hero_section.dart';
 import '../widgets/about_section.dart';
@@ -15,9 +16,10 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final ScrollController _scrollController = ScrollController();
-  
+  DateTime? _foregroundStartedAt;
+
   // Keys for scrolling to sections
   final GlobalKey _heroKey = GlobalKey();
   final GlobalKey _aboutKey = GlobalKey();
@@ -27,14 +29,36 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey _contactKey = GlobalKey();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _foregroundStartedAt = DateTime.now();
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _scrollController.dispose();
     super.dispose();
   }
 
-  void _scrollToSection(String section) {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _foregroundStartedAt = DateTime.now();
+    } else if (state == AppLifecycleState.paused) {
+      final start = _foregroundStartedAt;
+      if (start != null) {
+        final sec = DateTime.now().difference(start).inSeconds;
+        AnalyticsService.logForegroundSegmentSeconds(sec);
+      }
+    }
+  }
+
+  void _scrollToSection(String section, String source) {
+    AnalyticsService.logSectionNavigate(section, source);
     GlobalKey? targetKey;
-    
+
     switch (section) {
       case 'hero':
         targetKey = _heroKey;
@@ -66,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _scrollToAbout() {
-    _scrollToSection('about');
+    _scrollToSection('about', 'hero_scroll');
   }
 
   @override
@@ -101,8 +125,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         key: _heroKey,
                         child: HeroSection(
                           onScrollDown: _scrollToAbout,
-                          onContactTap: () => _scrollToSection('contact'),
-                          onProjectsTap: () => _scrollToSection('projects'),
+                          onContactTap: () =>
+                              _scrollToSection('contact', 'hero_contact'),
+                          onProjectsTap: () =>
+                              _scrollToSection('projects', 'hero_projects'),
                         ),
                       ),
                     ),

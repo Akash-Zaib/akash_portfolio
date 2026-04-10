@@ -98,6 +98,7 @@ class _HeroSectionState extends State<HeroSection>
 
   Widget _buildDesktopLayout(AppLocalizations l10n, double heroHeight) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Left side - Profile Photo
         Expanded(
@@ -113,112 +114,119 @@ class _HeroSectionState extends State<HeroSection>
             ),
           ),
         ),
-        
+
         const SizedBox(width: 40),
-        
-        // Right side - Text content
+
+        // Right side - scrolls when zoom / large text would overflow fixed hero height
         Expanded(
           flex: 3,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Spacer(flex: 2),
-              
-              // Greeting
-              _buildAnimatedElement(
-                delay: 0.1,
-                child: Text(
-                  l10n.heroGreeting,
-                  style: AppTheme.titleMedium.copyWith(
-                    color: AppTheme.primaryBlue,
-                    letterSpacing: 2,
-                    fontWeight: FontWeight.w500,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                padding: const EdgeInsets.only(right: 4, bottom: 8),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Greeting
+                      _buildAnimatedElement(
+                        delay: 0.1,
+                        child: Text(
+                          l10n.heroGreeting,
+                          style: AppTheme.titleMedium.copyWith(
+                            color: AppTheme.primaryBlue,
+                            letterSpacing: 2,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Name with gradient
+                      _buildAnimatedElement(
+                        delay: 0.2,
+                        child: GradientText(
+                          text: l10n.heroName,
+                          style: AppTheme.displayLarge.copyWith(fontSize: 56),
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      _buildAnimatedElement(
+                        delay: 0.35,
+                        child: _buildHeroHeadlines(
+                          l10n,
+                          useTypewriterForSubtitle: true,
+                          isMobile: false,
+                        ),
+                      ),
+
+                      const SizedBox(height: 32),
+
+                      _buildAnimatedElement(
+                        delay: 0.5,
+                        child: Wrap(
+                          spacing: 12,
+                          runSpacing: 12,
+                          children: [
+                            _SkillTag(label: l10n.heroTagFlutter, isMobile: false),
+                            _SkillTag(label: l10n.heroTagDart, isMobile: false),
+                            _SkillTag(label: l10n.heroTagFirebase, isMobile: false),
+                            _SkillTag(label: l10n.heroTagUIUX, isMobile: false),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 40),
+
+                      _buildAnimatedElement(
+                        delay: 0.65,
+                        child: Wrap(
+                          spacing: 16,
+                          runSpacing: 12,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            _CTAButton(
+                              label: l10n.heroCTAContact,
+                              isPrimary: true,
+                              onTap: widget.onContactTap,
+                            ),
+                            _CTAButton(
+                              label: l10n.heroCTAProjects,
+                              isPrimary: false,
+                              onTap: widget.onProjectsTap,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      _buildAnimatedElement(
+                        delay: 0.72,
+                        child: _buildMiniBio(l10n, isMobile: false),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      _buildAnimatedElement(
+                        delay: 0.78,
+                        child: _buildPlatformIconRow(context, l10n, isMobile: false),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      _buildScrollIndicator(l10n, false),
+                    ],
                   ),
                 ),
-              ),
-              
-              const SizedBox(height: 16),
-              
-              // Name with gradient
-              _buildAnimatedElement(
-                delay: 0.2,
-                child: GradientText(
-                  text: l10n.heroName,
-                  style: AppTheme.displayLarge.copyWith(fontSize: 56),
-                ),
-              ),
-              
-              const SizedBox(height: 12),
-              
-              // Senior title lines (typewriter on subtitle)
-              _buildAnimatedElement(
-                delay: 0.35,
-                child: _buildHeroHeadlines(
-                  l10n,
-                  useTypewriterForSubtitle: true,
-                  isMobile: false,
-                ),
-              ),
-              
-              const SizedBox(height: 32),
-              
-              // Skill Tags
-              _buildAnimatedElement(
-                delay: 0.5,
-                child: Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: [
-                    _SkillTag(label: l10n.heroTagFlutter, isMobile: false),
-                    _SkillTag(label: l10n.heroTagDart, isMobile: false),
-                    _SkillTag(label: l10n.heroTagFirebase, isMobile: false),
-                    _SkillTag(label: l10n.heroTagUIUX, isMobile: false),
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 40),
-              
-              // CTA Buttons
-              _buildAnimatedElement(
-                delay: 0.65,
-                child: Row(
-                  children: [
-                    _CTAButton(
-                      label: l10n.heroCTAContact,
-                      isPrimary: true,
-                      onTap: widget.onContactTap,
-                    ),
-                    const SizedBox(width: 16),
-                    _CTAButton(
-                      label: l10n.heroCTAProjects,
-                      isPrimary: false,
-                      onTap: widget.onProjectsTap,
-                    ),
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 20),
-
-              _buildAnimatedElement(
-                delay: 0.72,
-                child: _buildMiniBio(l10n, isMobile: false),
-              ),
-
-              const SizedBox(height: 20),
-
-              _buildAnimatedElement(
-                delay: 0.78,
-                child: _buildPlatformIconRow(context, l10n, isMobile: false),
-              ),
-              
-              const Spacer(flex: 3),
-              
-              // Scroll indicator
-              _buildScrollIndicator(l10n, false),
-            ],
+              );
+            },
           ),
         ),
       ],
@@ -318,8 +326,11 @@ class _HeroSectionState extends State<HeroSection>
                 // CTA Buttons
                 _buildAnimatedElement(
                   delay: 0.55,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: isMobile ? 12 : 16,
+                    runSpacing: 12,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       _CTAButton(
                         label: l10n.heroCTAContact,
@@ -327,7 +338,6 @@ class _HeroSectionState extends State<HeroSection>
                         onTap: widget.onContactTap,
                         isMobile: isMobile,
                       ),
-                      SizedBox(width: isMobile ? 12 : 16),
                       _CTAButton(
                         label: l10n.heroCTAProjects,
                         isPrimary: false,
@@ -550,23 +560,13 @@ class _HeroSectionState extends State<HeroSection>
       );
     }
 
-    if (useWrapLayout) {
-      return Wrap(
-        alignment: WrapAlignment.center,
-        spacing: gap,
-        runSpacing: gap,
-        children: [
-          for (final e in entries) chip(e.$1, e.$2),
-        ],
-      );
-    }
-
-    return Row(
+    return Wrap(
+      alignment:
+          useWrapLayout ? WrapAlignment.center : WrapAlignment.start,
+      spacing: gap,
+      runSpacing: gap,
       children: [
-        for (int i = 0; i < entries.length; i++) ...[
-          if (i > 0) SizedBox(width: gap),
-          chip(entries[i].$1, entries[i].$2),
-        ],
+        for (final e in entries) chip(e.$1, e.$2),
       ],
     );
   }

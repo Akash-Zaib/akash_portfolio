@@ -8,9 +8,14 @@ import '../config/theme.dart';
 import '../config/constants.dart';
 import '../providers/locale_provider.dart';
 import 'responsive_builder.dart';
+import '../services/analytics_service.dart';
+
+/// [section] matches home keys: hero, about, experience, projects, skills, contact.
+/// [source] is where the tap came from, e.g. `top_nav`, `mobile_menu`.
+typedef PortfolioNavCallback = void Function(String section, String source);
 
 class CustomNavigationBar extends StatefulWidget {
-  final Function(String) onNavItemTap;
+  final PortfolioNavCallback onNavItemTap;
 
   const CustomNavigationBar({
     super.key,
@@ -58,7 +63,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
       children: [
         // Logo/Name
         GestureDetector(
-          onTap: () => widget.onNavItemTap('hero'),
+          onTap: () => widget.onNavItemTap('hero', 'top_nav'),
           child: Text(
             'AZM',
             style: AppTheme.titleLarge.copyWith(
@@ -70,20 +75,34 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
             ),
           ),
         ),
-        
-        // Navigation Items
-        Row(
-          children: [
-            _NavItem(label: l10n.navAbout, onTap: () => widget.onNavItemTap('about')),
-            _NavItem(label: l10n.navExperience, onTap: () => widget.onNavItemTap('experience')),
-            _NavItem(label: l10n.navProjects, onTap: () => widget.onNavItemTap('projects')),
-            _NavItem(label: l10n.navSkills, onTap: () => widget.onNavItemTap('skills')),
-            _NavItem(label: l10n.navContact, onTap: () => widget.onNavItemTap('contact')),
-            const SizedBox(width: 16),
-            const _TopSocialLinks(),
-            const SizedBox(width: 12),
-            const _LanguageDropdown(),
-          ],
+
+        // Navigation + actions: right-aligned; scroll horizontally only when content overflows
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const ClampingScrollPhysics(),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _NavItem(label: l10n.navAbout, onTap: () => widget.onNavItemTap('about', 'top_nav')),
+                      _NavItem(label: l10n.navExperience, onTap: () => widget.onNavItemTap('experience', 'top_nav')),
+                      _NavItem(label: l10n.navProjects, onTap: () => widget.onNavItemTap('projects', 'top_nav')),
+                      _NavItem(label: l10n.navSkills, onTap: () => widget.onNavItemTap('skills', 'top_nav')),
+                      _NavItem(label: l10n.navContact, onTap: () => widget.onNavItemTap('contact', 'top_nav')),
+                      const SizedBox(width: 16),
+                      const _TopSocialLinks(),
+                      const SizedBox(width: 12),
+                      const _LanguageDropdown(),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ],
     );
@@ -107,9 +126,10 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                   ),
               ),
             ),
-            
-            // Menu and Language
+
+            // Menu and Language (right side, same as before)
             Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const _TopSocialLinks(compact: true),
                 const SizedBox(width: 8),
@@ -140,35 +160,35 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                 _MobileNavItem(
                   label: l10n.navAbout,
                   onTap: () {
-                    widget.onNavItemTap('about');
+                    widget.onNavItemTap('about', 'mobile_menu');
                     setState(() => _isMenuOpen = false);
                   },
                 ),
                 _MobileNavItem(
                   label: l10n.navExperience,
                   onTap: () {
-                    widget.onNavItemTap('experience');
+                    widget.onNavItemTap('experience', 'mobile_menu');
                     setState(() => _isMenuOpen = false);
                   },
                 ),
                 _MobileNavItem(
                   label: l10n.navProjects,
                   onTap: () {
-                    widget.onNavItemTap('projects');
+                    widget.onNavItemTap('projects', 'mobile_menu');
                     setState(() => _isMenuOpen = false);
                   },
                 ),
                 _MobileNavItem(
                   label: l10n.navSkills,
                   onTap: () {
-                    widget.onNavItemTap('skills');
+                    widget.onNavItemTap('skills', 'mobile_menu');
                     setState(() => _isMenuOpen = false);
                   },
                 ),
                 _MobileNavItem(
                   label: l10n.navContact,
                   onTap: () {
-                    widget.onNavItemTap('contact');
+                    widget.onNavItemTap('contact', 'mobile_menu');
                     setState(() => _isMenuOpen = false);
                   },
                 ),
@@ -354,6 +374,7 @@ class _TopSocialLinks extends StatelessWidget {
           icon: FontAwesomeIcons.linkedinIn,
           url: AppConstants.linkedInUrl,
           tooltip: 'LinkedIn',
+          linkType: 'linkedin',
           iconSize: iconSize,
           size: buttonSize,
         ),
@@ -362,6 +383,7 @@ class _TopSocialLinks extends StatelessWidget {
           icon: FontAwesomeIcons.whatsapp,
           url: getWhatsAppUrl(),
           tooltip: 'WhatsApp',
+          linkType: 'whatsapp',
           iconSize: iconSize,
           size: buttonSize,
         ),
@@ -370,6 +392,7 @@ class _TopSocialLinks extends StatelessWidget {
           icon: FontAwesomeIcons.github,
           url: AppConstants.githubUrl,
           tooltip: 'GitHub',
+          linkType: 'github',
           iconSize: iconSize,
           size: buttonSize,
         ),
@@ -382,6 +405,7 @@ class _SocialNavIcon extends StatefulWidget {
   final IconData icon;
   final String url;
   final String tooltip;
+  final String linkType;
   final double iconSize;
   final double size;
 
@@ -389,6 +413,7 @@ class _SocialNavIcon extends StatefulWidget {
     required this.icon,
     required this.url,
     required this.tooltip,
+    required this.linkType,
     required this.iconSize,
     required this.size,
   });
@@ -401,6 +426,7 @@ class _SocialNavIconState extends State<_SocialNavIcon> {
   bool _isHovered = false;
 
   Future<void> _openLink() async {
+    await AnalyticsService.logLinkOpen(widget.linkType);
     final uri = Uri.tryParse(widget.url);
     if (uri == null) return;
     await launchUrl(uri, mode: LaunchMode.platformDefault);
