@@ -23,7 +23,7 @@ class AppConstants {
   static const String cgpa = '3.43/4';
 
   /// Hero / home section profile photo (see `assets/images/`)
-  static const String heroProfileImage = 'assets/images/personalImage.jpeg';
+  static const String heroProfileImage = 'assets/images/image.jpg';
 
   // CV URL - Host your CV on Google Drive, Dropbox, or any cloud service
   // To get Google Drive direct link:
