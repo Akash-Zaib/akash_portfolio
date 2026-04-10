@@ -45002,7 +45002,7 @@ o=s.a.b-p
 p=B.c.d_(o,500,950)
 s=A.aHE(a)
 return new A.dl(new A.x6(A.b3(A.aj1(!0,new A.c3(s,r||q?this.ac7(a,m,r,o):this.ac6(m,o),n),!0),p,1/0),n),n)},
-ac6(a,b){return A.dn(A.b([A.fL(this.f9(A.fj(new A.uq("assets/images/personalImage.jpeg",280,!0,null),null,null),0),2),B.a53,A.fL(A.zT(new A.arR(this,a)),3)],t.p),B.T,B.x,B.B)},
+ac6(a,b){return A.dn(A.b([A.fL(this.f9(A.fj(new A.uq("assets/images/image.jpg",280,!0,null),null,null),0),2),B.a53,A.fL(A.zT(new A.arR(this,a)),3)],t.p),B.T,B.x,B.B)},
 ac7(a,b,c,d){return A.zT(new A.arS(this,d,c?160:200,c,b))},
 f9(a,b){var s=this.f
 s===$&&A.a()
@@ -45041,7 +45041,7 @@ $2(a,b){var s=null,r=this.a,q=this.b,p=r.f9(A.aX(q.gos(),s,s,s,s,A.aw().$3$color
 return A.SK(new A.eI(new A.ab(0,1/0,b.d,1/0),A.bN(A.b([p,B.n6,r.f9(A.ts(A.aw().$3$color$fontSize$fontWeight(B.e,72,B.ar).ld(56),o,s),0.2),B.jS,r.f9(r.Ng(q,!1,!0),0.35),B.Gx,r.f9(A.nE(B.bS,A.b([new A.ij(q.gox(),!1,s),new A.ij(q.gov(),!1,s),new A.ij(q.gow(),!1,s),new A.ij(q.goy(),!1,s)],n),B.df,12,12),0.5),B.a59,r.f9(A.nE(B.bS,A.b([new A.nI(q.goq(),!0,r.a.d,!1,s),new A.nI(q.gor(),!1,r.a.e,!1,s)],n),B.nu,12,16),0.65),B.Gw,r.f9(r.Ni(q,!1),0.72),B.Gw,r.f9(r.Nj(a,q,!1),0.78),B.n7,r.Nk(q,!1)],n),B.T,B.ev,B.B),s),B.LQ,B.e6,s,B.aJ)},
 $S:99}
 A.arS.prototype={
-$2(a3,a4){var s,r,q,p,o,n,m,l,k,j,i,h,g=this,f=null,e=A.b3(f,g.b*0.04,f),d=g.a,c=d.f9(new A.uq("assets/images/personalImage.jpeg",g.c,!0,f),0),b=g.d,a=A.b3(f,b?20:28,f),a0=g.e,a1=a0.gos(),a2=A.aw().$3$color$fontSize$fontWeight(B.e,14,B.w)
+$2(a3,a4){var s,r,q,p,o,n,m,l,k,j,i,h,g=this,f=null,e=A.b3(f,g.b*0.04,f),d=g.a,c=d.f9(new A.uq("assets/images/image.jpg",g.c,!0,f),0),b=g.d,a=A.b3(f,b?20:28,f),a0=g.e,a1=a0.gos(),a2=A.aw().$3$color$fontSize$fontWeight(B.e,14,B.w)
 a1=d.f9(A.aX(a1,f,f,f,f,a2.iU(B.z,b?12:14,2),f,f),0.15)
 a2=a0.got()
 a2=d.f9(A.ts(b?A.aw().$3$color$fontSize$fontWeight(B.e,48,B.ar).ld(32):A.aw().$3$color$fontSize$fontWeight(B.e,48,B.ar).ld(42),a2,B.aR),0.25)
