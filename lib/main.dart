@@ -34,9 +34,13 @@ class MyApp extends StatelessWidget {
             title: 'Akash Zaib Malik - Portfolio',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.darkTheme,
-            navigatorObservers: [
-              FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
-            ],
+            navigatorObservers: Firebase.apps.isNotEmpty
+                ? [
+                    FirebaseAnalyticsObserver(
+                      analytics: FirebaseAnalytics.instance,
+                    ),
+                  ]
+                : const <NavigatorObserver>[],
             locale: localeProvider.locale,
             supportedLocales: LocaleProvider.supportedLocales,
             localizationsDelegates: const [

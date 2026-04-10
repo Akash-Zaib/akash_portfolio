@@ -1,4 +1,9 @@
+/// App-wide constants. For production EmailJS keys, prefer build-time defines (see below).
 class AppConstants {
+  /// Public site URL (EmailJS allowed origins, fallbacks). No trailing slash.
+  /// Update if you use a custom domain.
+  static const String productionSiteOrigin = 'https://akash-zaib.github.io';
+
   // Personal Information
   static const String name = 'Akash Zaib Malik';
   static const String role = 'Mobile App Developer (Flutter)';
@@ -9,7 +14,7 @@ class AppConstants {
   // Social Links
   static const String linkedInUrl =
       'https://www.linkedin.com/in/akash-zaib-malik-0a1968248';
-  static const String githubUrl = 'http://github.com/Akash-Zaib';
+  static const String githubUrl = 'https://github.com/Akash-Zaib';
   static const String whatsAppNumber = '923056838083';
 
   // Education
@@ -18,7 +23,7 @@ class AppConstants {
   static const String cgpa = '3.43/4';
 
   /// Hero / home section profile photo (see `assets/images/`)
-  static const String heroProfileImage = 'assets/images/image.jpg';
+  static const String heroProfileImage = 'assets/images/personalImage.jpeg';
 
   // CV URL - Host your CV on Google Drive, Dropbox, or any cloud service
   // To get Google Drive direct link:
@@ -35,12 +40,33 @@ class AppConstants {
   static const String cvDownloadUrl =
       'https://drive.google.com/uc?id=1fmFOPJvW_3u0TAeNwLaZypcuJBmj17uM&export=download';
 
-  // EmailJS Configuration - UPDATE THESE WITH YOUR ACTUAL VALUES
-  static const String emailJsServiceId = 'YOUR_SERVICE_ID';
-  static const String emailJsTemplateId = 'YOUR_TEMPLATE_ID';
-  static const String emailJsPublicKey = 'YOUR_PUBLIC_KEY';
+  // EmailJS — set in EmailJS dashboard, then either:
+  // 1) Replace defaults below, or
+  // 2) Build with: flutter build web --dart-define=EMAILJS_SERVICE_ID=... (same for TEMPLATE and PUBLIC_KEY)
+  static const String emailJsServiceId = String.fromEnvironment(
+    'EMAILJS_SERVICE_ID',
+    defaultValue: 'YOUR_SERVICE_ID',
+  );
+  static const String emailJsTemplateId = String.fromEnvironment(
+    'EMAILJS_TEMPLATE_ID',
+    defaultValue: 'YOUR_TEMPLATE_ID',
+  );
+  static const String emailJsPublicKey = String.fromEnvironment(
+    'EMAILJS_PUBLIC_KEY',
+    defaultValue: 'YOUR_PUBLIC_KEY',
+  );
   static const String emailJsUrl =
       'https://api.emailjs.com/api/v1.0/email/send';
+
+  /// True when EmailJS placeholders are still unset (contact form will not work).
+  static bool get isEmailJsConfigured =>
+      emailJsServiceId != 'YOUR_SERVICE_ID' &&
+      emailJsTemplateId != 'YOUR_TEMPLATE_ID' &&
+      emailJsPublicKey != 'YOUR_PUBLIC_KEY';
+
+  /// Shown when user tries to send but EmailJS is not set up (English; configure l10n later if needed).
+  static const String emailJsNotConfiguredMessage =
+      'Message sending is not configured. Add EmailJS keys in AppConstants or build with --dart-define.';
 
   // Skill Tags for Hero Section
   static const List<String> heroTags = [

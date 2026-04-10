@@ -1,6 +1,9 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+
 import '../config/constants.dart';
+import '../utils/request_origin.dart';
 
 class EmailService {
   static Future<bool> sendEmail({
@@ -8,12 +11,16 @@ class EmailService {
     required String email,
     required String message,
   }) async {
+    if (!AppConstants.isEmailJsConfigured) {
+      return false;
+    }
+
     try {
       final response = await http.post(
         Uri.parse(AppConstants.emailJsUrl),
         headers: {
           'Content-Type': 'application/json',
-          'origin': 'http://localhost',
+          'origin': requestOriginHeader(),
         },
         body: jsonEncode({
           'service_id': AppConstants.emailJsServiceId,
@@ -29,7 +36,7 @@ class EmailService {
       );
 
       return response.statusCode == 200;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }

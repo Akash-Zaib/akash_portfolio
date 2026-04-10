@@ -37,6 +37,19 @@ class _ContactSectionState extends State<ContactSection> {
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) return;
 
+    if (!AppConstants.isEmailJsConfigured) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _isSuccess = false;
+        _statusMessage = AppConstants.emailJsNotConfiguredMessage;
+      });
+      Future.delayed(const Duration(seconds: 6), () {
+        if (mounted) setState(() => _statusMessage = null);
+      });
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _statusMessage = null;

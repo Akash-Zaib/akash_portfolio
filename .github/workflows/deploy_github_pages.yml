@@ -1,0 +1,67 @@
+# Builds Flutter web with the correct base-href for GitHub Pages project sites:
+# https://<user>.github.io/<repo>/
+#
+# Add repo secrets (optional, for EmailJS): EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY
+
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Build web (release)
+        env:
+          EMAILJS_SERVICE_ID: ${{ secrets.EMAILJS_SERVICE_ID }}
+          EMAILJS_TEMPLATE_ID: ${{ secrets.EMAILJS_TEMPLATE_ID }}
+          EMAILJS_PUBLIC_KEY: ${{ secrets.EMAILJS_PUBLIC_KEY }}
+        run: |
+          BASE="/${{ github.event.repository.name }}/"
+          EXTRA=""
+          if [ -n "$EMAILJS_SERVICE_ID" ]; then
+            EXTRA="$EXTRA --dart-define=EMAILJS_SERVICE_ID=$EMAILJS_SERVICE_ID"
+          fi
+          if [ -n "$EMAILJS_TEMPLATE_ID" ]; then
+            EXTRA="$EXTRA --dart-define=EMAILJS_TEMPLATE_ID=$EMAILJS_TEMPLATE_ID"
+          fi
+          if [ -n "$EMAILJS_PUBLIC_KEY" ]; then
+            EXTRA="$EXTRA --dart-define=EMAILJS_PUBLIC_KEY=$EMAILJS_PUBLIC_KEY"
+          fi
+          flutter build web --release --base-href "$BASE" $EXTRA
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

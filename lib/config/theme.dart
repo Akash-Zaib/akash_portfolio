@@ -627,7 +627,11 @@ class _HoverScaleWidgetState extends State<HoverScaleWidget> {
         child: AnimatedContainer(
           duration: AppTheme.quickAnimation,
           curve: AppTheme.defaultCurve,
-          transform: Matrix4.identity()..scale(_isHovered ? widget.scale : 1.0),
+          transform: Matrix4.diagonal3Values(
+            _isHovered ? widget.scale : 1.0,
+            _isHovered ? widget.scale : 1.0,
+            1.0,
+          ),
           transformAlignment: Alignment.center,
           child: widget.child,
         ),
