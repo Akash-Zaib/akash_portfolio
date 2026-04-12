@@ -32,13 +32,13 @@ class AppConstants {
   // 3. Copy link like: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
   // 4. Replace FILE_ID below with your actual file ID
   static const String cvPath =
-      'https://drive.google.com/file/d/1fmFOPJvW_3u0TAeNwLaZypcuJBmj17uM/view?usp=sharing';
+      'https://drive.google.com/file/d/1x42xRgFeSHfXRqTbC-ziILbHSmPG-KlG/view?usp=sharing';
   static const String cvFileName = 'Akash_Zaib_Malik_CV.pdf';
 
   // Direct download link for CV (for Google Drive, use this format)
   // Replace YOUR_FILE_ID_HERE with actual file ID from Google Drive
   static const String cvDownloadUrl =
-      'https://drive.google.com/uc?id=1fmFOPJvW_3u0TAeNwLaZypcuJBmj17uM&export=download';
+      'https://drive.google.com/uc?export=download&id=1x42xRgFeSHfXRqTbC-ziILbHSmPG-KlG';
 
   // EmailJS — set in EmailJS dashboard, then either:
   // 1) Replace defaults below, or
