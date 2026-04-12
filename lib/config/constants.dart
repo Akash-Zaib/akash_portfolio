@@ -30,14 +30,14 @@ class AppConstants {
   static const String _cvFolderId = '1PmxifEjghwDZPkYJdQrz-NxebpPvmSUK';
 
   static const String cvPath =
-      'https://drive.google.com/drive/folders/$_cvFolderId?usp=sharing';
+      'https://drive.google.com/file/d/1x42xRgFeSHfXRqTbC-ziILbHSmPG-KlG/view?usp=sharing';
 
   static const String cvFileName = 'Akash_Zaib_Malik_CV.pdf';
 
   /// Direct download. For a single PDF, prefer that file’s ID (from
   /// `.../file/d/FILE_ID/view`); folder IDs may not download as one file.
   static const String cvDownloadUrl =
-      'https://drive.google.com/uc?id=$_cvFolderId&export=download';
+      'https://drive.google.com/uc?export=download&id=1x42xRgFeSHfXRqTbC-ziILbHSmPG-KlG';
 
   // EmailJS — set in EmailJS dashboard, then either:
   // 1) Replace defaults below, or
