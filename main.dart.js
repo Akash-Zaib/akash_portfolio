@@ -44519,7 +44519,7 @@ break}p.a7(new A.aqN(p))
 s=3
 return A.G(A.fO(B.LE,null,t.z),$async$pO)
 case 3:s=4
-return A.G(A.a7L("https://drive.google.com/uc?id=1fmFOPJvW_3u0TAeNwLaZypcuJBmj17uM&export=download","Akash_Zaib_Malik_CV.pdf"),$async$pO)
+return A.G(A.a7L("https://drive.google.com/uc?export=download&id=1x42xRgFeSHfXRqTbC-ziILbHSmPG-KlG","Akash_Zaib_Malik_CV.pdf"),$async$pO)
 case 4:o=b
 s=p.c!=null?5:6
 break
@@ -44780,7 +44780,7 @@ q1(){var s=0,r=A.M(t.H),q
 var $async$q1=A.N(function(a,b){if(a===1)return A.J(b,r)
 for(;;)switch(s){case 0:s=2
 return A.G(A.IP("online_cv"),$async$q1)
-case 2:q=A.fX("https://drive.google.com/file/d/1fmFOPJvW_3u0TAeNwLaZypcuJBmj17uM/view?usp=sharing",0,null)
+case 2:q=A.fX("https://drive.google.com/file/d/1x42xRgFeSHfXRqTbC-ziILbHSmPG-KlG/view?usp=sharing",0,null)
 s=5
 return A.G(A.wK(q),$async$q1)
 case 5:s=b?3:4
