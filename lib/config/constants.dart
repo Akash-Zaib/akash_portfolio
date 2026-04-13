@@ -32,7 +32,12 @@ class AppConstants {
   // 3. Copy link like: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
   // 4. Replace FILE_ID below with your actual file ID
   static const String cvPath =
+<<<<<<< Updated upstream
       'https://drive.google.com/file/d/1x42xRgFeSHfXRqTbC-ziILbHSmPG-KlG/view?usp=sharing';
+=======
+      'https://drive.google.com/file/d/1fmFOPJvW_3u0TAeNwLaZypcuJBmj17uM/view?usp=sharing';
+
+>>>>>>> Stashed changes
   static const String cvFileName = 'Akash_Zaib_Malik_CV.pdf';
 
   // Direct download link for CV (for Google Drive, use this format)
